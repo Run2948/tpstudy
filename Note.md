@@ -442,3 +442,41 @@
   // 应用 Trace
   'app_trace' => true,
   ```
+
+
+## 查询数据
+
+### 一．基本查询
+
+1. Db::table()中 table 必须指定完整数据表（包括前缀）；
+2. 如果希望只查询一条数据，可以使用 find()方法；
+`Db::table('tp_user')->find();`
+3. Db::getLastSql()方法，可以得到最近一条 SQL 查询的原生语句；
+`SELECT * FROM `tp_user` LIMIT 1`
+4. 想指定数据查询，可以使用 where()方法；
+`Db::table('tp_user')->where('id', 27)->find()`
+SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
+5. 没有查询到任何值，则返回 null；
+6. 使用 findOrFail()方法同样可以查询一条数据，在没有数据时抛出一个异常；
+`Db::table('tp_user')->where('id', 1)->findOrFail()`
+7. 使用 findOrEmpty()方法也可以查询一条数据，但在没有数据时返回一个空数组；
+    `Db::table('tp_user')->where('id', 1)->findOrEmpty();`
+8. 想要获取多列数据，可以使用 select()方法；
+    `Db::table('tp_user')->select();`
+   SELECT * FROM `tp_user`
+9. 多列数据在查询不到任何数据时返回空数组，使用 selectOrFail()抛出异常；
+`Db::table('tp_user')->where('id', 1)->selectOrFail();`
+10. 当在数据库配置文件中设置了前缀，那么我们可以使用 name()方法忽略前缀；
+`Db::name('user')->selectOrFail();``
+
+### 二．更多方式
+
+1. ThinkPHP 提供了一个助手函数 db，可以更方便的查询；
+`\db('user')->select();`
+2. 通过 value()方法，可以查询指定字段的值（单个），没有数据返回 null；
+`Db::name('user')->where('id', 27)->value('username');`
+3. 通过 colunm()方法，可以查询指定列的值（多个），没有数据返回空数组；
+`Db::name('user')->column('username');`
+4. 可以指定 id 作为列值的索引；
+`Db::name('user')->column('username', 'id');`
+5. 数据分批处理、大批数据处理和 JSON 数据查询，当遇到具体问题再探讨；
