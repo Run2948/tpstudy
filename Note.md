@@ -808,7 +808,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 ### 一．where
 
 1. 表达式查询，就是 where()方法的基础查询方式；
-  `Db::name('user')->where('id', '>', 70)->select();`
+    `Db::name('user')->where('id', '>', 70)->select();`
 
 2. 关联数组查询，通过键值对来数组键值对匹配的查询方式；
 
@@ -829,9 +829,9 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```
 
 4. 将复杂的数组组装后，通过变量传递，将增加可读性；
-  `$map[] = ['gender', '=', '男'];`
-  `$map[] = ['price', 'in', [60, 70, 80]];`
-  `$result = Db::name('user')->where($map)->select();`
+    `$map[] = ['gender', '=', '男'];`
+    `$map[] = ['price', 'in', [60, 70, 80]];`
+    `$result = Db::name('user')->where($map)->select();`
 
 5. 字符串形式传递，简单粗暴的查询方式；
 `Db::name('user')->where('gender="男" AND price IN (60, 70, 80)')->select();`
@@ -861,3 +861,60 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 1. 使用 alias()方法，给数据库起一个别名；
 `Db::name('user')->alias('a')->select();`
+
+
+## 链式方法【下】
+
+### 一．limit
+
+1. 使用 limit()方法，限制获取输出数据的个数；
+  `Db::name('user')->limit(5)->select();`
+
+2. 分页模式，即传递两个参数，比如从第 3 条开始显示 5 条 limit(2,5)；
+  `Db::name('user')->limit(2, 5)->select();`
+
+3. 实现分页，需要严格计算每页显示的条数，然后从第几条开始；
+
+  ```php
+  //第一页
+  Db::name('user')->limit(0, 5)->select();
+  //第二页
+  Db::name('user')->limit(5, 5)->select();
+  ```
+
+### 二．page
+
+1. page()分页方法，优化了 limit()方法，无须计算分页条数；
+
+  ```php
+  //第一页
+  Db::name('user')->page(1, 5)->select();
+  //第二页
+  Db::name('user')->page(2, 5)->select();
+  ```
+
+### 三．order
+
+1. 使用 order()方法，可以指定排序方式，没有指定第二参数，默认 asc；
+`Db::name('user')->order('id', 'desc')->select();`
+2. 支持数组的方式，对多个字段进行排序；
+`Db::name('user')->order(['create_time'=>'desc', 'price'=>'asc'])->select();`
+
+### 四．group
+
+1. 使用 group()方法，给性别不同的人进行 price 字段的总和统计；
+`Db::name('user')->field('gender, sum(price)')->group('gender')->select();`
+2. 也可以进行多字段分组统计；
+`Db::name('user')->field('gender, sum(price)')->group('gender,password')->select();`
+
+### 五．having
+
+1. 使用 group()分组之后，再使用 having()进行筛选；
+
+  ```php
+  $result = Db::name('user')
+  ->field('gender, sum(price)')
+  ->group('gender')
+  ->having('sum(price)>600')
+  ->select();
+  ```

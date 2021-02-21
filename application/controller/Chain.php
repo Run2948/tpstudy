@@ -55,4 +55,33 @@ class Chain extends Controller
 
         return json($result);
     }
+
+    public function other()
+    {
+//        $result = Db::name('user')->limit(5)->select();
+
+//        $result = Db::name('user')->limit(2, 5)->select();
+
+        //第一页
+//        $result = Db::name('user')->limit(0, 5)->select();
+        //第二页
+//        $result = Db::name('user')->limit(5, 5)->select();
+
+        //第一页
+//        $result = Db::name('user')->limit(0, 5)->select();
+        //第二页
+//        $result = Db::name('user')->limit(5, 5)->select();
+
+
+//        $result = Db::name('user')->field('gender, sum(price)')->group('gender')->select();
+//        $result = Db::name('user')->field('gender, sum(price)')->group('gender,password')->select();
+
+        $result = Db::name('user')
+            ->field('gender, sum(price)')
+            ->group('gender')
+            ->having('sum(price)>600')
+            ->select();
+
+        return json($result);
+    }
 }
