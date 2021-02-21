@@ -521,3 +521,138 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
   ```php
   $user->removeOption('where')->select();
   ```
+
+
+## 增删改操作
+
+### 一．新增数据
+
+1. 使用 insert()方法可以向数据表添加一条数据；
+
+  ```php
+  $data = [
+  'username' => '辉夜',
+  'password' => '123',
+  'gender' => '女',
+  'email' => 'huiye@163.com',
+  'price' => 90,
+  'details' => '123',
+  'create_time' => date('Y-m-d H:i:s')
+  ];
+  Db::name('user')->insert($data);
+  ```
+
+2. 如果新增成功，insert()方法会返回一个 1 值；
+
+  ```php
+  $flag = Db::name('user')->insert($data);
+  if ($flag) return '新增成功！';
+  ```
+
+3. 你可以使用 data()方法来设置添加的数据数组；
+  `Db::name('user')->data($data)->insert();`
+
+4. 如果你添加一个不存在的数据，会抛出一个异常 Exception；
+
+5. 如果采用的是 mysql 数据库，支持 REPLACE 写入；
+  `Db::name('user')->insert($data, true);`
+
+6. 使用 insertGetId()方法，可以在新增成功后返回当前数据 ID；
+  `Db::name('user')->insertGetId($data);`
+
+7. 使用 insertAll()方法，可以批量新增数据，但要保持数组结构一致；
+
+  ```php
+  $data = [
+  [
+  'username' => '辉夜 1',
+  'password' => '123',
+  'gender' => '女',
+  'email' => 'huiye@163.com',
+  'price' => 90,
+  'details' => 123,
+  'create_time' => date('Y-m-d H:i:s')
+  ],
+  [
+  'username' => '辉夜 2',
+  'password' => '123',
+  'gender' => '女',
+  'email' => 'huiye@163.com',
+  'price' => 90,
+  'details' => 123,
+  'create_time' => date('Y-m-d H:i:s')
+  ],
+  ];
+  Db::name('user')->insertAll($data);
+  ```
+
+8. 批量新增也支持 data()方法，和单独新增类似；
+  `Db::name('user')->data($data)->insertAll();`
+
+9. 批量新增也支持 reaplce 写入，和单独新增类似；
+`Db::name('user')->insertAll($data, true);`
+
+### 二．修改数据
+
+1. 使用 update()方法来修改数据，修改成功返回影响行数，没有修改返回 0；
+
+  ```php
+  $data = [
+  'username' => '李白'
+  ];
+  $update = Db::name('user')->where('id', 38)->update($data);
+  return $update;
+  ```
+
+2. 或者使用 data()方法传入要修改的数组，如果两边都传入会合并；
+  `Db::name('user')->where('id', 38)->
+  data($data)->update(['password'=>'456']);`
+
+3. 如果修改数组中包含主键，那么可以直接修改；
+
+  ```php
+  $data = [
+  'username' => '李白',
+  'id' => 38
+  ];
+  Db::name('user')->update($data);
+  ```
+
+4. 使用 inc()方法可以对字段增值， dec()方法可以对字段减值；
+  `Db::name('user')->inc('price')->dec('price', 3)->update($data);`
+
+5. 增值和减值如果同时对一个字段操作，前面一个会失效；
+
+6. 使用 exp()方法可以在字段中使用 mysql 函数；
+  `Db::name('user')->exp('email', 'UPPER(email)')->update($data);`
+
+7. 使用 raw()方法修改更新，更加容易方便；
+
+  ```php
+  $data = [
+  'username' => '李白',
+  'email' => Db::raw('UPPER(email)'),
+  'price' => Db::raw('price - 3'),
+  'id' => 38
+  ];
+  Db::name('user')->update($data);
+  ```
+
+8. 使用 setField()方法可以更新一个字段值；
+  `Db::name('user')->where('id', 38)->setField('username', '辉夜');`
+
+9. 增值 setInc()和减值 setDec()也有简单的做法，方便更新一个字段值；
+  `Db::name('user')->where('id', 38)->setInc('price');`
+
+10. 增值和减值如果不指定第二个参数，则步长为 1；
+
+### 三．删除数据
+
+1. 极简删除可以根据主键直接删除，删除成功返回影响行数，否则 0；
+`Db::name('user')->delete(51);`
+2. 根据主键，还可以删除多条记录；
+`Db::name('user')->delete([48,49,50]);`
+3. 正常情况下，通过 where()方法来删除；
+`Db::name('user')->where('id', 47)->delete();`
+4. 通过 true 参数删除数据表所有数据，我还没测试，大家自行测试下；
+`Db::name('user')->delete(true);`
