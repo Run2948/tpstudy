@@ -774,10 +774,10 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 ### 二．子查询
 
 1. 使用 fetchSql()方法，可以设置不执行 SQL，而返回 SQL 语句，默认 true；
-  `Db::name('user')->fetchSql(true)->select();`
+    `Db::name('user')->fetchSql(true)->select();`
 
 2. 使用 buidSql()方法，也是返回 SQL 语句，但不需要再执行 select()，且有括号；
-  `Db::name('user')->buildSql(true);`
+    `Db::name('user')->buildSql(true);`
 
 3. 结合以上方法，我们实现一个子查询；
 
@@ -801,3 +801,63 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 `Db::query('select * from tp_user');`
 2. 使用 execute 方法，进行原生 SQL 更新写入等，SQL 错误返回 false；
 `Db::execute('update tp_user set username="孙悟空" where id=29');`
+
+
+## 链式方法【上】
+
+### 一．where
+
+1. 表达式查询，就是 where()方法的基础查询方式；
+  `Db::name('user')->where('id', '>', 70)->select();`
+
+2. 关联数组查询，通过键值对来数组键值对匹配的查询方式；
+
+  ```php
+  $result = Db::name('user')->where([
+  'gender' => '男',
+  'price' => 100 //'price' => [60,70,80]
+  ])->select();
+  ```
+
+3. 索引数组查询，通过数组里的数组拼装方式来查询；
+
+  ```php
+  $result = Db::name('user')->where([
+  ['gender', '=', '男'],
+  ['price', '=', '100']
+  ])->select();
+  ```
+
+4. 将复杂的数组组装后，通过变量传递，将增加可读性；
+  `$map[] = ['gender', '=', '男'];`
+  `$map[] = ['price', 'in', [60, 70, 80]];`
+  `$result = Db::name('user')->where($map)->select();`
+
+5. 字符串形式传递，简单粗暴的查询方式；
+`Db::name('user')->where('gender="男" AND price IN (60, 70, 80)')->select();`
+
+### 二．field
+
+1. 使用 field()方法，可以指定要查询的字段；
+`Db::name('user')->field('id, username, email')->select();`
+`Db::name('user')->field(['id', 'username', 'email'])->select();`
+2. 使用 field()方法，给指定的字段设置别名；
+`Db::name('user')->field('id,username as name')->select();`
+`Db::name('user')->field(['id', 'username'=>'name'])->select();`
+3. 在 field()方法里，可以直接给字段设置 MySQL 函数；
+`Db::name('user')->field('id,SUM(price)')->select();`
+4. 对于更加复杂的 MySQL 函数，必须使用字段数组形式；
+`Db::name('user')->field(['id', 'LEFT(email, 5)'=>'leftemail'
+])->select();`
+5. 使用 field(true)的布尔参数，可以显式的查询获取所有字段，而不是*；
+`Db::name('user')->field(true)->select();`
+6. 使用 field()方法中字段排除，可以屏蔽掉想要不显示的字段；
+`Db::name('user')->field('details,email', true)->select();`
+`Db::name('user')->field(['details,email'], true)->select();`
+7. 使用 field()方法在新增时，验证字段的合法性；
+`Db::name('user')->field('username, email, details')->insert($data);`
+
+### 三．alias
+
+1. 使用 alias()方法，给数据库起一个别名；
+`Db::name('user')->alias('a')->select();`
