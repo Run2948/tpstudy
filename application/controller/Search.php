@@ -49,4 +49,34 @@ class Search
         $result = Db::name('user')->whereTime('create_time', '-2 hour')->select();
         return json($result);
     }
+
+    public function other()
+    {
+//        $result = Db::name('user')->count();
+//        $result = Db::name('user')->count('uid');
+
+//        $result = Db::name('user')->max('price');
+//        $result = Db::name('user')->max('price',false);
+
+//        $result = Db::name('user')->min('price');
+//        $result = Db::name('user')->avg('price');
+//        $result = Db::name('user')->sum('price');
+
+//        $subQuery = Db::name('user') -> fetchSql(true) -> select();
+//        $subQuery = Db::name('user') -> buildSql(true);
+
+//        $subQuery = Db::name('two')->field('uid')->where('gender', '男')->buildSql(true);
+//        $result = Db::name('one')->where('id', 'exp', 'IN ' . $subQuery)->select();
+
+//        $result = Db::name('one')->where('id', 'in', function ($query) {
+//            $query->name('two')->where('gender', '男')->field('uid');
+//        })->select();
+//
+//        return json($result);
+
+        $result = Db::query('select * from tp_user');
+//        $result = Db::execute('update tp_user set username="孙悟空" where id=29');
+
+//        return $result;
+    }
 }

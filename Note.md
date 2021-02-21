@@ -750,3 +750,54 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 2. 查询两个时间字段时间有效期的数据，比如会员开始到结束的期间；
 `Db::name('user')->whereBetweenTimeField('start_time',
 'end_time')->select();`
+
+
+## 聚合、原生和子查询
+
+### 一．聚合查询
+
+1. 使用 count()方法，可以求出所查询数据的数量；
+`Db::name('user')->count();`
+2. count()可设置指定 id，比如有空值(Null)的 uid，不会计算数量；
+`Db::name('user')->count('uid');`
+3. 使用 max()方法，求出所查询数据字段的最大值；
+`Db::name('user')->max('price');`
+4. 如果 max()方法，求出的值不是数值，则通过第二参数强制转换；
+`Db::name('user')->max('price', false);`
+5. 使用 min()方法，求出所查询数据字段的最小值，也可以强制转换；
+`Db::name('user')->min('price');`
+6. 使用 avg()方法，求出所查询数据字段的平均值；
+`Db::name('user')->avg('price');`
+7. 使用 sum()方法，求出所查询数据字段的总和；
+`Db::name('user')->sum('price');`
+
+### 二．子查询
+
+1. 使用 fetchSql()方法，可以设置不执行 SQL，而返回 SQL 语句，默认 true；
+  `Db::name('user')->fetchSql(true)->select();`
+
+2. 使用 buidSql()方法，也是返回 SQL 语句，但不需要再执行 select()，且有括号；
+  `Db::name('user')->buildSql(true);`
+
+3. 结合以上方法，我们实现一个子查询；
+
+  ```php
+  $subQuery = Db::name('two')->field('uid')->where('gender',
+  '男')->buildSql(true);
+  $result = Db::name('one')->where('id','exp','IN '.$subQuery)->select();
+  ```
+
+4. 使用闭包的方式执行子查询；
+
+  ```php
+  $result = Db::name('one')->where('id', 'in', function ($query) {
+  	$query->name('two')->where('gender', '男')->field('uid');
+  })->select();
+  ```
+
+### 三．原生查询
+
+1. 使用 query()方法，进行原生 SQL 查询，适用于读取操作，SQL 错误返回 false；
+`Db::query('select * from tp_user');`
+2. 使用 execute 方法，进行原生 SQL 更新写入等，SQL 错误返回 false；
+`Db::execute('update tp_user set username="孙悟空" where id=29');`
