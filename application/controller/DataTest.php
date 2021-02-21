@@ -31,9 +31,17 @@ class DataTest extends Controller
 //        $data = \db('user') -> column('username');
 //        $data = \db('user') -> column('username','id');
 
-        $data = \db('user') -> field('id,username') -> select();
+//        $data = \db('user') -> field('id,username') -> select();
 
-        return json($data);
+//        $data = Db::name('user') -> where('id',27) -> order('id','desc') -> find();
+
+        $user = Db::name('user');
+
+        $data1 = $user -> where('id',27) -> order('id','desc') -> find();
+//        $data2 = $user -> select();
+        $data2 = $user -> removeOption('where') -> removeOption('order') -> select();
+
+        return json($data2);
     }
 
     public function getNoModelData()

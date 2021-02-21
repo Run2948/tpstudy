@@ -480,3 +480,44 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
 4. 可以指定 id 作为列值的索引；
 `Db::name('user')->column('username', 'id');`
 5. 数据分批处理、大批数据处理和 JSON 数据查询，当遇到具体问题再探讨；
+
+
+## 链式查询
+
+### 一．查询规则
+
+1. 前面课程中我们通过指向符号“->”多次连续调用方法称为：链式查询；
+2. 当 Db::name('user')时，返回数据库对象，即可连缀数据库对应的方法；
+3. 而每次执行一个数据库查询方法时，比如 where()，还将返回数据库对象；
+4. 只要还是数据库对象，那么就可以一直使用指向符号进行链式查询；
+5. 如果想要最后得到结果，可以使用 find()、select()等方法结束查询；
+6. 而 find()和 select()是结果查询方法（放在最后），并不是链式查询方法；
+`Db::name('user')->where('id', 27)->order('id', 'desc')->find()`
+7. 除了查询方法可以使用链式连贯操作，CURD 操作也可以使用（下节课研究）；
+8. 那么，有多少种类似 where()的链式操作方法呢？打开手册看一下...
+
+### 二．更多查询
+1. 如果多次使用数据库查询，那么每次静态创建都会生成一个实例，造成浪费；
+
+2. 我们可以把对象实例保存下来，再进行反复调用即可；
+
+  ```php
+  $user = Db::name('user');
+  $data = $user->select();
+  ```
+
+3. 当同一个对象实例第二次查询后，会保留第一次查询的值；
+
+  ```php
+  $data1 = $user->order('id', 'desc')->select();
+  $data2 = $user->select();
+  return Db::getLastSql();
+  ```
+
+  SELECT * FROM `tp_user` ORDER BY `id` DESC
+
+4. 使用 removeOption()方法，可以清理掉上一次查询保留的值；
+
+  ```php
+  $user->removeOption('where')->select();
+  ```
