@@ -550,15 +550,15 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
   ```
 
 3. 你可以使用 data()方法来设置添加的数据数组；
-  `Db::name('user')->data($data)->insert();`
+    `Db::name('user')->data($data)->insert();`
 
 4. 如果你添加一个不存在的数据，会抛出一个异常 Exception；
 
 5. 如果采用的是 mysql 数据库，支持 REPLACE 写入；
-  `Db::name('user')->insert($data, true);`
+    `Db::name('user')->insert($data, true);`
 
 6. 使用 insertGetId()方法，可以在新增成功后返回当前数据 ID；
-  `Db::name('user')->insertGetId($data);`
+    `Db::name('user')->insertGetId($data);`
 
 7. 使用 insertAll()方法，可以批量新增数据，但要保持数组结构一致；
 
@@ -587,7 +587,7 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
   ```
 
 8. 批量新增也支持 data()方法，和单独新增类似；
-  `Db::name('user')->data($data)->insertAll();`
+    `Db::name('user')->data($data)->insertAll();`
 
 9. 批量新增也支持 reaplce 写入，和单独新增类似；
 `Db::name('user')->insertAll($data, true);`
@@ -605,8 +605,8 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
   ```
 
 2. 或者使用 data()方法传入要修改的数组，如果两边都传入会合并；
-  `Db::name('user')->where('id', 38)->
-  data($data)->update(['password'=>'456']);`
+    `Db::name('user')->where('id', 38)->
+    data($data)->update(['password'=>'456']);`
 
 3. 如果修改数组中包含主键，那么可以直接修改；
 
@@ -619,12 +619,12 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
   ```
 
 4. 使用 inc()方法可以对字段增值， dec()方法可以对字段减值；
-  `Db::name('user')->inc('price')->dec('price', 3)->update($data);`
+    `Db::name('user')->inc('price')->dec('price', 3)->update($data);`
 
 5. 增值和减值如果同时对一个字段操作，前面一个会失效；
 
 6. 使用 exp()方法可以在字段中使用 mysql 函数；
-  `Db::name('user')->exp('email', 'UPPER(email)')->update($data);`
+    `Db::name('user')->exp('email', 'UPPER(email)')->update($data);`
 
 7. 使用 raw()方法修改更新，更加容易方便；
 
@@ -639,10 +639,10 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
   ```
 
 8. 使用 setField()方法可以更新一个字段值；
-  `Db::name('user')->where('id', 38)->setField('username', '辉夜');`
+    `Db::name('user')->where('id', 38)->setField('username', '辉夜');`
 
 9. 增值 setInc()和减值 setDec()也有简单的做法，方便更新一个字段值；
-  `Db::name('user')->where('id', 38)->setInc('price');`
+    `Db::name('user')->where('id', 38)->setInc('price');`
 
 10. 增值和减值如果不指定第二个参数，则步长为 1；
 
@@ -656,3 +656,47 @@ SELECT * FROM `tp_user` WHERE `id` = 27 LIMIT 1
 `Db::name('user')->where('id', 47)->delete();`
 4. 通过 true 参数删除数据表所有数据，我还没测试，大家自行测试下；
 `Db::name('user')->delete(true);`
+
+
+## 查询表达式
+
+### 一．比较查询
+
+1. 在查询数据进行筛选时，我们采用 where()方法，比如 id=80；
+`Db::name('user')->where('id', 80)->find();`
+`Db::name('user')->where('id','=',80)->find();`
+2. where(字段名,查询条件)，where(字段名,表达式,查询条件)；
+3. 其中，表达式不区分大小写，包括了比较、区间和时间三种类型的查询；
+4. 使用`<>`、`>`、`<`、`>=`、`<=`可以筛选出各种符合比较值的数据列表；
+`Db::name('user')->where('id','<>',80)->select();`
+
+### 二．区间查询
+
+1. 使用 like 表达式进行模糊查询；
+`Db::name('user')->where('email','like','xiao%')->select();`
+2. like 表达式还可以支持数组传递进行模糊查询；
+`Db::name('user')->where('email','like',['xiao%','wu%'], 'or')->select();`
+SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
+3. like 表达式具有两个快捷方式 whereLike()和 whereNoLike()；
+`Db::name('user')->whereLike('email','xiao%')->select();`
+`Db::name('user')->whereNotLike('email','xiao%')->select();`
+4. between 表达式具有两个快捷方式 whereBetween()和 whereNotBetween()；
+`Db::name('user')->where('id','between','19,25')->select();`
+`Db::name('user')->where('id','between',[19, 25])->select();`
+`Db::name('user')->whereBetween('id',[19, 25])->select();`
+`Db::name('user')->whereNotBetween('id',[19, 25])->select();`
+5. in 表达式具有两个快捷方式 whereIn()和 whereNotIn()；
+`Db::name('user')->where('id','in', '19,21,29')->select();`
+`Db::name('user')->whereIn('id','19,21,29')->select();`
+`Db::name('user')->whereNotIn('id','19,21,29')->select();`
+6. null 表达式具有两个快捷方式 whereNull()和 whereNotNull()；
+`Db::name('user')->where('uid','null')->select();`
+`Db::name('user')->where('uid','not null')->select();`
+`Db::name('user')->whereNull('uid')->select();`
+`Db::name('user')->whereNotNull('uid')->select();`
+
+### 三．其它查询
+
+1. 使用 exp 可以自定义字段后的 SQL 语句；
+`Db::name('user')->where('id','exp','IN (19,21,25)')->select();`
+`Db::name('user')->whereExp('id','IN (19,21,25)')->select();`
