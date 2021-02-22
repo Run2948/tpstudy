@@ -33,9 +33,15 @@ class User extends Model
     ];
 
     // 数据自动完成
-//    protected $auto = ['email'];
-//    protected $insert = ['uid' => 1];
-//    protected $update = [];
+    protected $auto = ['email'];
+    protected $insert = ['uid' => 1];
+    protected $update = [];
+
+    // 设置全局查询
+    protected function base($query)
+    {
+//        $query->where('status', 1);
+    }
 
     // 初始化方法
     protected static function init()
@@ -82,5 +88,21 @@ class User extends Model
     public function searchCreateTimeAttr($query, $value)
     {
         $query->whereBetweenTime('create_time', $value[0], $value[1]);
+    }
+
+    // 创建查询范围
+    public function scopeGenderMale($query)
+    {
+        $query->where('gender', '男')->field('id,username,gender,email')->limit(5);
+    }
+
+    public function scopeEmailLike($query, $value)
+    {
+        $query->where('email', 'like', '%' . $value . '%');
+    }
+
+    public function scopePriceGreater($query, $value)
+    {
+        $query->where('price', '>', 80);
     }
 }

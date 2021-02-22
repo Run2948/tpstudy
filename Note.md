@@ -1603,9 +1603,9 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```
 
 4. 数据库查询读取的字段很多都是字符串类型，我们可以转换成如下类型：
-  integer(整型)、float(浮点型)、boolean(布尔型)、array(数组)
-  object(对象)、serialize(序列化)、json(json)、timestamp(时间戳)
-  datetime(日期)
+    integer(整型)、float(浮点型)、boolean(布尔型)、array(数组)
+    object(对象)、serialize(序列化)、json(json)、timestamp(时间戳)
+    datetime(日期)
 
 5. 由于数据库没有那么多类型演示，常用度不显著，我们提供几个方便演示的；
 
@@ -1664,3 +1664,117 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 8. 也就是说，邮箱的大写，设置 update 更加合适，因为新增必填必然触发修改器；
 
 9. 对于 update 自动完成，和 auto、insert 雷同，自行演示；
+
+
+
+## 模型查询范围和输出
+
+### 一．模型查询范围
+
+1. 在模型端创建一个封装的查询或写入方法，方便控制器端等调用；
+
+2. 比如，封装一个筛选所有性别为男的查询，并且只显示部分字段 5 条；
+
+3. 方法名规范：前缀 scope，后缀随意，调用时直接把后缀作为参数使用；
+
+  ```php
+  public function scopeGenderMale($query)
+  {
+  	$query->where('gender', '男')->field('id,username,gender,email')->limit(5);
+  }
+  ```
+
+4. 在控制器端，我们我们直接调用并输出结果即可；
+
+  ```php
+  public function queryScope()
+  {
+      $result = UserModel::scope('gendermale')->select();
+      //$result = UserModel::gendermale()->select();
+      return json($result);
+  }
+  ```
+
+5. 也可以实现多个查询封装方法连缀调用，比如找出邮箱 xiao 并大于 80 分的；
+
+  ```php
+  public function scopeEmailLike($query, $value)
+  {
+  	$query->where('email', 'like', '%'.$value.'%');
+  }
+  public function scopePriceGreater($query, $value)
+  {
+  	$query->where('price', '>', 80);
+  }
+  $result = UserModel::emailLike('xiao')->priceGreater(80)->select();
+  ```
+
+6. 查询范围只能使用 find()和 select()两种方法；
+
+7. 全局范围查询，就是在此模型下不管怎么查询都会加上全局条件；
+
+  ```php
+  //全局范围查询
+  protected function base($query)
+  {
+  	$query->where('status', 1);
+  }
+  ```
+
+8. 在定义了全局查询后，如果某些不需要全局查询可以使用 useGlobalScope 取消；
+
+  ```php
+  UserModel::useGlobalScope(false)
+  ```
+
+9. 当然，设置为 true，则开启全局范围查询，注意：这个方法需要跟在::后面；
+
+  ```php
+  UserModel::useGlobalScope(true)
+  ```
+
+### 二．模型输出方式
+
+1. 通过模版进行数据输出；
+
+  ```php
+  public function view()
+  {
+      $user = UserModel::get(21);
+      $this->assign('user', $user);
+      return $this->fetch();
+  }
+  ```
+
+2. 根据错误提示，可以创建相对应的模版，然后进行数据显示；
+
+  ```php
+  {$user.username}.
+  {$user.gender}.
+  {$user.email}
+  ```
+
+3. 使用 toArray()方法，将对象按照数组的方式输出；
+
+  ```php
+  $user = UserModel::get(21);
+  print_r($user->toArray());
+  ```
+
+4. 和之前的数据集一样，它也支持 hidden、append、visible 等方法；
+
+  ```php
+  print_r($user->hidden(['password,update_time'])->toArray());
+  ```
+
+5. toArray()方法也支持 all()和 select()等列表数据；
+
+  ```php
+  print_r(UserModel::select()->toArray());
+  ```
+
+6. 使用 toJson()方法将数据对象进行序列化操作，也支持 hidden 等方法；
+
+  ```php
+  print_r($user->toJson());
+  ```

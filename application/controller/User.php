@@ -3,9 +3,10 @@
 namespace app\controller;
 //use app\model\User;
 use app\model\User as UserModel;
+use think\Controller;
 use think\Db;
 
-class User
+class User extends Controller
 {
     public function index()
     {
@@ -233,11 +234,41 @@ class User
 //        ]);
     }
 
-    public function typeConversion(){
+    public function typeConversion()
+    {
         $user = UserModel::get(21);
 
-        var_dump($user -> price);
-        var_dump($user -> status);
-        var_dump($user -> create_time);
+        var_dump($user->price);
+        var_dump($user->status);
+        var_dump($user->create_time);
+    }
+
+    public function queryScope()
+    {
+//        $result = UserModel::scope('gendermale')->select();
+//        $result = UserModel::genderMale()->select();
+
+//        $result = UserModel::emailLike('xiao') -> priceGreater(80) -> select();
+
+        $result = UserModel::useGlobalScope(false)->emailLike('xiao')->priceGreater(80)->select();
+        echo Db::getLastSql();
+        return json($result);
+    }
+
+    public function view()
+    {
+        $user = UserModel::get(21);
+        $this->assign('user', $user);
+        return $this->fetch();
+    }
+
+    public function output()
+    {
+        $user = UserModel::get(21);
+//       print_r($user -> toArray());
+//        print_r($user->hidden(['password'])->toArray());
+
+//        print_r(UserModel::select()->toArray());
+        print_r($user->toJson());
     }
 }
