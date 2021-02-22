@@ -34,4 +34,8 @@ return [
     'taglib_end'   => '}',
     // 过滤函数, 默认采用 htmlentities 防止 XSS 跨站脚本攻击
 //    'default_filter' => 'htmlspecialchars',
+    'tpl_replace_string' => [
+        '__JS__' => 'static/js',
+        '__CSS__' => 'static/css',
+    ],
 ];
