@@ -103,9 +103,18 @@ class See extends Controller
     public function testCompare()
     {
         $this->assign('username', 'Mr.Lee');
-
         $this->assign('number', 10);
 
         return $this->fetch('compare');
     }
+
+    public function testCondition()
+    {
+        $this->assign('number', 10);
+        $user = new \stdClass();
+        $user->name = 'Mr.Lee';
+        $this->assign('user', $user);
+        return $this->fetch('condition');
+    }
+
 }

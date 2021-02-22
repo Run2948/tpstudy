@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件判断标签</title>
+</head>
+<body>
+
+{switch number}
+{case 1}1{/case}
+{case 5}5{/case}
+{case 10|20|30}10,20,30 均可{/case}
+{default/}不存在
+{/switch}
+
+<hr/>
+
+{if $number > 10}大于 10{/if}  <br/>
+
+{if ($number > 10) OR ($number > 5)}大于 10{/if}  <br/>
+
+{if $number > 10}
+大于 10
+{else/}
+小于 10
+{/if}  <br/>
+
+{if $number > 100}
+大于 100
+{elseif $number > 50}
+大于 50
+{else}
+小于 50
+{/if}  <br/>
+
+{if strtoupper($user->name) == 'MR.LEE'}
+确认李先生
+{/if}
+
+<hr/>
+
+{in name='number' value='10,20,30,40,50'}存在{/in} <br/>
+{in name='number' value='10,20,30,40,50'}
+在数据列表中
+{else/}
+不在数据列表中
+{/in}  <br/>
+
+{between name='number' value='10,50'}存在{/between}  <br/>
+{between name='number' value='10,50'}
+在数据区间中
+{else/}
+不在数据区间中
+{/between}  <br/>
+
+<hr />
+
+{present name='user'}存在{/present}  <br/>
+{present name='user'}
+user 已声明
+{else/}
+user 未声明
+{/present}  <br/>
+
+
+{empty name='username'}有值{/empty}  <br/>
+{empty name='username'}
+username 有值
+{else/}
+username 没值
+{/empty}  <br/>
+
+
+<!--{defined name='PI' value='3.1415926'}-->
+{defined name='PI'}
+PI 存在
+{else/}
+PI 不存在
+{/defined}
+
+
+</body>
+</html>

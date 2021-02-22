@@ -2121,13 +2121,13 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 2. 当模版位置创建好后，输出控制器的赋值变量时，说你用花括号和$符号；
 
-  ```php+HTML
+  ```php
   {$name}
   ```
 
 3. 当程序运行的时候，会在 runtime/temp 目录下生成一个编译文件；
 
-  ```php+HTML
+  ```php
   <?php echo htmlentities($name); ?>
   ```
 
@@ -2139,7 +2139,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $this->assign('user', $data);
   ```
 
-  ```php+HTML
+  ```php
   模版调用：{$user.username}.{$user.email} //或{$user['email']}
   编译文件：<?php echo htmlentities($user['username']); ?>
   ```
@@ -2153,7 +2153,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $this->assign('obj', $obj);
   ```
 
-  ```php+HTML
+  ```php
   模版调用：{$obj->username}.{$obj->email}
   编译文件：<?php echo htmlentities($obj->username); ?>
   ```
@@ -2164,7 +2164,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 1. 如果输出的变量没有值，可以直接设置默认值代替；
 
-  ```php+HTML
+  ```php
   {$user.username|default='没有用户名'}
   ```
 
@@ -2172,20 +2172,20 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 3. 系统变量有：$_SERVER、$_ENV、$_GET、$_POST、$_REQUEST、$_SESSION 和$_COOKIE；
 
-  ```php+HTML
+  ```php
   {$Think.get.name} //其它雷同
   ```
 
 4. 除了变量，常量也可以在模版直接输出；
 
-  ```php+HTML
+  ```php
   {$Think.const.PHP_VERSION}
   {$Think.PHP_VERSION}
   ```
 
 5. 系统配置也可以直接在模版输出，配置参数可以在 config 文件下；
 
-  ```php+HTML
+  ```php
   {$Think.config.default_return_type}
   ```
 
@@ -2200,7 +2200,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $this->assign('password', '123456');
   ```
 
-  ```php+HTML
+  ```php
   {$password|md5}
   ```
 
@@ -2216,7 +2216,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 5. 如果在某个字符，你不需要进行 HTML 实体转义的话，可以单独使用 raw 处理；
 
-  ```php+HTML
+  ```php
   {$user['email']|raw}
   ```
 
@@ -2237,7 +2237,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $this->assign('time', time());
 ```
 
-```php+HTML
+```php
  {$time|date='Y-m-d'}
 ```
 
@@ -2245,25 +2245,25 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $this->assign('number', '14');
 ```
 
-```php+HTML
+```php
   {$number|format='%x'}
 ```
 
 7. 如果函数中，需要多个参数调用，直接用逗号隔开即可；
 
-  ```php+HTML
+  ```php
   {$name|substr=0,3}
   ```
 
 8. 在模版中也支持多个函数进行操作，用|号隔开即可，函数从左到右依次执行；
 
-  ```php+HTML
+  ```php
   {$password|md5|upper|substr=0,3}
   ```
 
 9. 你也可以在模版中直接使用 PHP 的语法模式，该方法不会使用过滤转义：
 
-  ```php+HTML
+  ```php
   {:substr(strtoupper(md5($password)), 0, 3)}
   ```
 
@@ -2271,19 +2271,19 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 1. 在模版中的运算符有+、-、*、/、%、++、--等；
 
-  ```php+HTML
+  ```php
   {$number + $number}
   ```
 
 2. 如果模版中有运算符，则函数方法则不再支持；
 
-  ```php+HTML
+  ```php
   {$number + $number|default='没有值'}
   ```
 
 3. 模版也可以实现三元运算，包括其它写法；
 
-  ```php+HTML
+  ```php
   {$name ? '正确' : '错误'} //$name 为 true 返回正确，否则返回错误
   {$name ?= '真'} //$name 为 true 返回真
   {$Think.get.name ?? '不存在'} //??用于系统变量，没有值时输出
@@ -2292,7 +2292,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 4. 三元运算符也支持运算后返回布尔值判断；
 
-  ```php+HTML
+  ```php
   {$a == $b ? '真' : '假'}
   ```
 
@@ -2312,7 +2312,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 2. 在模版端使用对称的标签{foreach}...{/foreach}实现循环；
 
-  ```php+HTML
+  ```php
   {foreach $list as $key=>$obj}
   	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
   {/foreach}
@@ -2322,7 +2322,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 4. 也可以在模版中直接执行模型数据调用，而不需要在控制器设置；
 
-  ```php+HTML
+  ```php
   {foreach :model('user')->all() as $key=>$obj}
   	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
   {/foreach}
@@ -2332,7 +2332,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 1. volist 也是将查询得到的数据集通过循环的方式进行输出；
 
-  ```php+HTML
+  ```php
   {volist name='list' id='obj'}
   	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
   {/volist}
@@ -2342,7 +2342,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 3. volist 也可以直接使用模型对象获取数据集的方式进行循环输出；
 
-  ```php+HTML
+  ```php
   {volist name=':model("user")->all()' id='obj'}
   	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
   {/volist}
@@ -2350,7 +2350,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 4. 使用 offset 属性和 length 属性从第 4 条开始显示 5 条，这里下标从 0 开始；
 
-  ```php+HTML
+  ```php
   {volist name='list' id='obj' offset='3' length='5'}
   	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
   {/volist}
@@ -2358,7 +2358,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 5. 可以使用 eq 标签(下节课比较标签的知识点)，来实现奇数或偶数的筛选数据；
 
-  ```php+HTML
+  ```php
   {volist name='list' id='obj' mod='2'}
       {eq name='mod' value='0'}
           {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
@@ -2374,7 +2374,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 9. 使用 empty 属性，可以当没有任何数据的时候，实现输出指定的提示；
 
-  ```php+HTML
+  ```php
   {volist name=':model("user")->where("id", 1000)->all()' id='obj' empty='没有任何数据'}
   	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
   {/volist}
@@ -2384,7 +2384,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 11. 使用 key='k'，让索引从 1 开始计算，不指定就用{$i}，指定后失效；
 
-    ```php+HTML
+    ```php
     {volist name='list' id='obj' key='k'}
     	{$k}.{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
     {/volist}
@@ -2394,7 +2394,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 1. for 循环，顾名思义，通过起始和终止值，结合步长实现的循环；
 
-  ```php+HTML
+  ```php
   {for start='1' end='100' comparison='<' step='2' name='i'}
   	{$i}
   {/for}
@@ -2411,7 +2411,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $this->assign('username', 'Mr.Lee');
   ```
 
-  ```php+HTML
+  ```php
   {eq name='username' value='Mr.Lee'}
   李先生
   {/eq}
@@ -2421,7 +2421,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 3. 如果 value 也需要是一个变量的话，那么 value 需要加上$后的变量；
 
-  ```php+HTML
+  ```php
   {eq name='username' value='$username'}
   李先生
   {/eq}
@@ -2431,7 +2431,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 5. 相对应的{neq}或{notequal}，实现相反的效果；
 
-  ```php+HTML
+  ```php
   {neq name='username' value='Mr.Wang'}
   	两个值不相等
   {/neq}
@@ -2439,7 +2439,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 6. 这一组标签也支持 else 操作，标签为：{else/}；
 
-  ```php+HTML
+  ```php
   {eq name='username' value='Mr.Lee'}
   	两个值相等
   {else/}
@@ -2451,7 +2451,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 8. 除了相等和不等，还有上面六种比较形式；
 
-  ```php+HTML
+  ```php
   {egt name='number' value='10'}
   	大于等于 10
   {else/}
@@ -2461,7 +2461,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 9. 所有的标签都可以统一为{compare}标签使用，增加一个 type 方法指定即可；
 
-  ```php+HTML
+  ```php
   {compare name='username' value='Mr.Lee' type='eq'}
   两个值相等
   {/compare}
@@ -2471,14 +2471,14 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 1. 如果你想在模版文件中去定义一个变量，可以使用{assgin}标签；
 
-  ```php+HTML
+  ```php
   {assign name='var' value='123'} //也支持变量 value='$name'
   {$var}
   ```
 
 2. 有变量的定义就会有常量的定义，可以使用{define}标签；
 
-  ```php+HTML
+  ```php
   {define name='PI' value='3.1415926'}
   {$Think.const.PI}
   ```
@@ -2497,7 +2497,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 6. 标签之间，是支持嵌套功能的，比如从列表中找到“樱桃小丸子”；
 
-  ```php+HTML
+  ```php
   {foreach :model('user')->all() as $key=>$obj}
       {eq name='obj.username' value='樱桃小丸子'}
           {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
@@ -2505,4 +2505,138 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   {/foreach}
   ```
 
-  
+
+## 模版的条件判断标签
+
+### 一．switch 标签
+
+1. 使用{switch}...{/switch}可以实现多个条件判断；
+
+  ```php
+  {switch number}
+  {case 1}1{/case}
+  {case 5}5{/case}
+  {case 10}10{/case}
+  {default/}不存在
+  {/switch}
+  ```
+
+2. {case}也支持多个条件判断，使用|线隔开即可；
+
+  ```php
+  {case 10|20|30}10,20,30 均可{/case}
+  ```
+
+3. {case}后面也可以是变量，设置变量后不可以使用|线；
+
+  ```php
+  {case $id}
+  ```
+
+### 二．IF 标签
+
+1. 使用简单条件判断的{if}标签；
+
+  ```php
+  {if $number > 10}大于 10{/if}
+  ```
+
+2. {if}标签的条件判断可以使用 AND、OR 等语法；
+
+  ```php
+  {if ($number > 10) OR ($number > 5)}大于 10{/if}
+  ```
+
+3. {if}标签支持{else/}语法；
+
+  ```php
+  {if $number > 10}
+  	大于 10
+  {else/}
+  	小于 10
+  {/if}
+  ```
+
+4. {if}标签也支持{elseif}多重条件判断；
+
+  ```php
+  {if $number > 100}
+  	大于 100
+  {elseif $number > 50}
+  	大于 50
+  {else}
+  	小于 50
+  {/if}
+  ```
+
+5. {if}标签中的条件判断支持 PHP 写法，比如函数和对象调用；
+
+  ```php
+  {if strtoupper($user->name) == 'MR.LEE'}
+  确认李先生
+  {/if}
+  ```
+
+### 三．范围标签
+
+1. 范围标签：{in}和{notin}，判断值是否存在或不存在指定的数据列表中；
+
+  ```php
+  {in name='number' value='10,20,30,40,50'}存在{/in}
+  {in name='number' value='10,20,30,40,50'}
+  	在数据列表中
+  {else/}
+  	不在数据列表中
+  {/in}
+  ```
+
+2. name 值可以是是系统变量，比如$Think.xxx.yyy，value 可以是变量；
+
+3. 范围标签：{between}和{notbetween}，判断值是否存在或不存在数据区间中；
+
+  ```php
+  {between name='number' value='10,50'}存在{/between}
+  {between name='number' value='10,50'}
+  	在数据区间中
+  {else/}
+  	不在数据区间中
+  {/between}
+  ```
+
+4. between 中的 value 只能是两个值，表示一个区间，第三个值会无效；
+
+5. 区间不但可以表达数字，也可以是字母，比如 a-z，A-Z；
+
+### 四．是否存在标签
+
+1. 是否存在：{present}和{notpresent}判断变量是否已经定义赋值(是否存在)；
+
+  ```php
+  {present name='user'}存在{/present}
+  {present name='user'}
+  	user 已声明
+  {else/}
+  	user 为声明
+  {/present}
+  ```
+
+2. 是否为空：{empty}和{notempty}判断变量是否为空值；
+
+  ```php
+  {empty name='username'}有值{/empty}
+  {empty name='username'}
+  	username 有值
+  {else/}
+  	username 没值
+  {/empty}
+  ```
+
+3. 常量是否定义：{defined}判断常量是否定义(是否存在)；
+
+  ```php
+  {defined name='PI'}
+  	PI 存在
+  {else/}
+  	PI 不存在
+  {/defined}
+  ```
