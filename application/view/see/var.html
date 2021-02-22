@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+< lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>模版变量输出</title>
 </head>
-<body>
+<br>
 {$name | default = 'ThinkPHP'}
 
 <br/>
@@ -14,12 +14,40 @@
 {$obj->username}.{$obj->email}
 
 <br/>
-{$Think.get.key}
-
-{$Think.const.PHP_VERSION}
-{$Think.PHP_VERSION}
+{$Think.const.PHP_VERSION}.{$Think.PHP_VERSION}
 
 {$Think.config.default_return_type}
+
+<br/>
+<hr/>
+{$password|md5}
+
+<br/>
+{$time|date='Y-m-d'}
+
+<br/>
+{$number|format='%x'}
+
+<br/>
+{$name|substr=0,3}
+
+<br/>
+{$password|md5|upper|substr=0,3}
+
+
+<br/>
+<hr/>
+{$number + $number}
+
+<br/>
+{$number + $number|default='没有值'}
+
+<br/>
+{$name ? '正确' : '错误'}
+{$name ?= '真'}
+{$Think.get.key ?? '不存在'}
+{$name ?: '不存在'}
+
 
 </body>
 </html>

@@ -83,6 +83,12 @@ class See extends Controller
         $obj->email = 'huiye@163.com';
         $this->assign('obj', $obj);
 
+        $this->assign('password', '123456');
+
+        $this->assign('time', time());
+
+        $this->assign('number', '14');
+
         return $this->fetch('var');
     }
 }

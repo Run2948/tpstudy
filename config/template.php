@@ -32,4 +32,6 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    // 过滤函数, 默认采用 htmlentities 防止 XSS 跨站脚本攻击
+//    'default_filter' => 'htmlspecialchars',
 ];

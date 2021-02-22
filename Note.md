@@ -2188,3 +2188,110 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```php+HTML
   {$Think.config.default_return_type}
   ```
+
+
+## 模版中函数和运算符
+
+### 一．使用函数
+
+1. 控制器端先赋值一个密码的变量，模版区设置 md5 加密操作；
+
+  ```php
+  $this->assign('password', '123456');
+  ```
+
+  ```php+HTML
+  {$password|md5}
+  ```
+
+2. 系统默认在编译的会采用 htmlentities 过滤函数防止 XSS 跨站脚本攻击；
+
+3. 如果你想更换一个过滤函数，比如 htmlspecialchars，可以在配置文件设置；
+
+4. 具体在 config 下的 template.php 中，增加一条如下配置即可；
+
+  ```php
+  'default_filter' => 'htmlspecialchars'
+  ```
+
+5. 如果在某个字符，你不需要进行 HTML 实体转义的话，可以单独使用 raw 处理；
+
+  ```php+HTML
+  {$user['email']|raw}
+  ```
+
+6. 系统还提供了一些固定的过滤方法，如下：
+
+| 函数    | 说明                   |
+| ------- | ---------------------- |
+| date    | 格式化时间`{$time|date='Y-m-d'}` |
+| format  | 格式化字符串`{$number|format='%x'}` |
+| upper   | 转换为大写             |
+| lower   | 转换为小写             |
+| first   | 输出数组的第一个元素   |
+| last    | 输出数组的最后一个元素 |
+| default | 默认值                 |
+| raw     | 不使用转义             |
+
+```php
+  $this->assign('time', time());
+```
+
+```php+HTML
+ {$time|date='Y-m-d'}
+```
+
+```php
+  $this->assign('number', '14');
+```
+
+```php+HTML
+  {$number|format='%x'}
+```
+
+7. 如果函数中，需要多个参数调用，直接用逗号隔开即可；
+
+  ```php+HTML
+  {$name|substr=0,3}
+  ```
+
+8. 在模版中也支持多个函数进行操作，用|号隔开即可，函数从左到右依次执行；
+
+  ```php+HTML
+  {$password|md5|upper|substr=0,3}
+  ```
+
+9. 你也可以在模版中直接使用 PHP 的语法模式，该方法不会使用过滤转义：
+
+  ```php+HTML
+  {:substr(strtoupper(md5($password)), 0, 3)}
+  ```
+
+### 二．运算符
+
+1. 在模版中的运算符有+、-、*、/、%、++、--等；
+
+  ```php+HTML
+  {$number + $number}
+  ```
+
+2. 如果模版中有运算符，则函数方法则不再支持；
+
+  ```php+HTML
+  {$number + $number|default='没有值'}
+  ```
+
+3. 模版也可以实现三元运算，包括其它写法；
+
+  ```php+HTML
+  {$name ? '正确' : '错误'} //$name 为 true 返回正确，否则返回错误
+  {$name ?= '真'} //$name 为 true 返回真
+  {$Think.get.name ?? '不存在'} //??用于系统变量，没有值时输出
+  {$name ?: '不存在'} //?:用于普通变量，没有值时输出
+  ```
+
+4. 三元运算符也支持运算后返回布尔值判断；
+
+  ```php+HTML
+  {$a == $b ? '真' : '假'}
+  ```
