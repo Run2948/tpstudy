@@ -1428,7 +1428,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 7. `withSearch()`中第一个数组参数，限定搜索器的字段，第二个则是表达式值；
 
 8. 如果想在搜索器查询的基础上再增加查询条件，直接使用链式查询即可；
-  `UserModel::withSearch(...)->where('gender', '女')->select()`
+    `UserModel::withSearch(...)->where('gender', '女')->select()`
 
 9. 如果你想在搜索器添加一个可以排序的功能，具体如下：
 
@@ -1507,3 +1507,78 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   return json($result1->diff($result2));
   return json($result2->intersect($result1));
   ```
+
+
+## 模型自动时间戳和只读字段
+
+### 一．模型自动时间戳
+
+1. 系统自动创建和更新时间戳功能默认是关闭状态；
+
+2. 如果你想全局开启，在 `database.php` 中，设置为 true；
+
+  ```php
+  // 自动写入时间戳字段
+  'auto_timestamp' => true,
+  ```
+
+3. 如果你只想设置某一个模型开启，需要设置特有字段；
+
+  ```php
+  //开启自动时间戳
+  protected $autoWriteTimestamp = true;
+  ```
+
+4. 当然，还有一种方法，就是全局开启，单独关闭某个或某几个模型为 false；
+
+5. 自动时间戳开启后，会自动写入 create_time 和 update_time 两个字段；
+
+6. 此时，它们的默认的类型是 int，如果是时间类型，可以更改如下：
+
+  ```php
+  'auto_timestamp' => 'datetime', //或
+  protected $autoWriteTimestamp = 'datetime';
+  ```
+
+7. 都配置完毕后，当我们新增一条数据时，无须新增 create_time 会自动写入时间；
+
+8. 同理，当我们修改一条数据时，无须修改 update_time 会自动更新时间；
+
+9. 自动时间戳只能在模型下有效，数据库方法不可以使用；
+
+10. 如果创建和修改时间戳不是默认定义的，也可以自定义；
+
+    ```php
+    protected $createTime = 'create_at';
+    protected $updateTime = 'update_at';
+    ```
+
+11. 如果业务中只需要 create_time 而不需要 update_time，可以关闭它；
+
+    ```php
+    protected $updateTime = false;
+    ```
+
+12. 也可以动态实现不修改 update_time，具体如下：
+
+    ```php
+    $user->isAutoWriteTimestamp(false)->save();
+    ```
+
+### 二．模型只读字段
+
+1. 模型中可以设置只读字段，就是无法被修改的字段设置；
+
+2. 我们要设置 username 和 email 不允许被修改，如下：
+
+  ```php
+  protected $readonly = ['username', 'email'];
+  ```
+
+3. 除了在模型端设置，也可以动态设置只读字段；
+
+  ```php
+  $user->readonly(['username', 'email'])->save();
+  ```
+
+4. 同样，只读字段只支持模型方式不支持数据库方式；

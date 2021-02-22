@@ -11,6 +11,20 @@ class User extends Model
     // 指定数据表为 tp_one
 //    protected $table = 'tp_one';
 
+    //开启自动时间戳
+//    protected $autoWriteTimestamp = true;
+    protected $autoWriteTimestamp = 'datetime';
+
+    // 自定义字段名
+//    protected $createTime = 'create_at';
+//    protected $updateTime = 'update_at';
+
+    // 单独设置不自动更新
+//    protected $updateTime = false;
+
+    // 设置 username 和 email 不允许被修改，如下：
+    protected $readonly = ['username', 'email'];
+
     // 初始化方法
     protected static function init()
     {
