@@ -868,10 +868,10 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 ### 一．limit
 
 1. 使用 limit()方法，限制获取输出数据的个数；
-  `Db::name('user')->limit(5)->select();`
+    `Db::name('user')->limit(5)->select();`
 
 2. 分页模式，即传递两个参数，比如从第 3 条开始显示 5 条 limit(2,5)；
-  `Db::name('user')->limit(2, 5)->select();`
+    `Db::name('user')->limit(2, 5)->select();`
 
 3. 实现分页，需要严格计算每页显示的条数，然后从第几条开始；
 
@@ -918,3 +918,79 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ->having('sum(price)>600')
   ->select();
   ```
+
+
+
+## 模型定义
+
+### 一．定义模型
+
+1. 定义一个和数据库表向匹配的模型；
+
+  ```php
+  class User extends Model
+  ```
+
+2. 模型会自动对应数据表，并且有一套自己的命名规则；
+
+3. 模型类需要去除表前缀(tp_)，采用驼峰式命名，并且首字母大写；
+  `tp_user(表名) => User`
+  `tp_user_type(表名) => UserType`
+
+4. 如果担心设置的模型类名和 PHP 关键字冲突，可以开启应用类后缀；
+
+5. 在 app.php 中，设置 class_suffix 属性为 true 即可；
+
+  ```php
+  // 应用类库后缀
+  'class_suffix' => true,
+  ```
+
+6. 设置完毕后，所有的控制器类名和模型类名需要加上 Controller 和 Model；
+
+  ```php
+  class UserModel
+  ```
+
+### 二．设置模型
+
+1. 默认主键为 id，你可以设置其它主键，比如 uid；
+
+  ```php
+  protected $pk = 'uid';
+  ```
+
+2. 从控制器端调用模型操作，如果和控制器类名重复，可以设置别名；
+
+  ```php
+  use app\model\User as UserModel;
+  ```
+
+3. 在模型定义中，可以设置其它的数据表；
+
+  ```php
+  protected $table = 'tp_one';
+  ```
+
+4. 模型和控制器一样，也有初始化，在这里必须设置 static 静态方法；
+
+  ```php
+  //模型初始化
+  protected static function init()
+  {
+      //第一次实例化的时候执行 init
+      echo '初始化 User 模型';
+  }
+  ```
+
+### 三．模型操作
+
+1. 模型操作数据和数据库操作一样，只不过不需要指定表了；
+
+  ```php
+  UserModel::select();
+  ```
+
+2. 数据库操作返回的列表是一个二维数组，而模型操作返回的是一个结果集；
+`[[]]` 和 `[{}]`
+

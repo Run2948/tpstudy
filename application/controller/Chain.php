@@ -51,7 +51,7 @@ class Chain extends Controller
             'details' => '123',
             'create_time' => date('Y-m-d H:i:s')
         ];
-        $result = Db::name('user')->alias('a')->field('username, email, details')->insert($data);
+        $result = Db::name('user')->field('username, email, details')->insert($data);
 
         return json($result);
     }
