@@ -43,9 +43,30 @@ class User
 //        $user = UserModel::getByUsername('辉夜');
 //        $user = UserModel::getByEmail('huiye@163.com');
 
-        $user = UserModel::max('price');
+//        $user = UserModel::max('price');
+//        return json($user);
 
-        return json($user);
+//        $user = UserModel::get(21);
+//        echo $user -> status;
+//        echo $user -> nothing;
+//        // 获取原始值
+//        echo $user -> getData('status');
+//
+//        dump($user->getData());
+//        dump($user);
+//
+//        return json($user);
+
+//        $result = UserModel::WithAttr('email', function ($value) {
+//            return strtoupper($value);
+//        })->select();
+//        return json($result);
+
+        $result = UserModel::WithAttr('status', function ($value) {
+            $status = [-1 => '删除', 0 => '禁用', 1 => '正常', 2 => '待审核'];
+            return $status[$value];
+        })->select();
+        return json($result);
     }
 
 

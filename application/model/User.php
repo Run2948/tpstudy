@@ -22,4 +22,24 @@ class User extends Model
     {
         return self::where('username', '辉夜')->find()->getAttr('username');
     }
+
+    // 创建一个获取器，status 字段
+    public function getStatusAttr($value)
+    {
+        $status = [-1 => '删除', 0 => '禁用', 1 => '正常', 2 => '待审核'];
+        return $status[$value];
+    }
+
+    // 创建一个虚拟字段的获取器，可以对多字段进行过滤
+    public function getNothingAttr($value, $data)
+    {
+        $myGet = [-1 => '删除', 0 => '禁用', 1 => '正常', 2 => '待审核'];
+        return $myGet[$data['status']];
+    }
+
+    // 模型修改器
+    public function setEmailAttr($value)
+    {
+        return strtoupper($value);
+    }
 }
