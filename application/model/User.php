@@ -3,6 +3,7 @@
 namespace app\model;
 
 use think\Model;
+use think\model\concern\SoftDelete;
 
 class User extends Model
 {
@@ -39,6 +40,11 @@ class User extends Model
 
     // 设置 json 字段
     protected $json = ['details', 'list'];
+
+    // 软删除
+    use SoftDelete;
+    protected $deleteTime = 'delete_time';
+//    protected $defaultSoftDelete = 0;
 
     // 设置全局查询
     protected function base($query)

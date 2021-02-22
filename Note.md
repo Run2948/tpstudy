@@ -1896,3 +1896,76 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $user->list->username = '李白';
   $user->save();
   ```
+
+
+## 软删除
+
+### 一．数据库软删除
+
+1. 所谓软删除，并不是真的删除数据，而是给数据设置一个标记；
+
+2. 首先，我们需要在数据表创建一个 delete_time，默认为 NULL；
+
+3. 其次，使用软删除功能，软删除其实就是 update 操作，创建一个时间标记；
+
+  ```php
+  Db::name('user')->where('id', 192)
+  ->useSoftDelete('delete_time', date('Y-m-d H:i:s'))
+  ->delete();
+  return Db::getLastSql();
+  ```
+
+4. 此时，这条数据就被软删除了。只不过，手册并没有给出更多的操作；
+
+### 二．模型软删除
+
+1. 介于数据库软删除没有太多的可操作的方法，官方手册推荐使用模型软操作；
+
+2. 首先，需要在模型端设置软删除的功能，引入 SoftDelete，它是 trait；
+
+  ```php
+  use SoftDelete;
+  protected $deleteTime = 'delete_time';
+  ```
+
+3. delete_time 默认我们设置的是 null，如果你想更改这个默认值，可以设置：
+
+  ```php
+  protected $defaultSoftDelete = 0;
+  ```
+
+4. 默认情况下，开启了软删除功能的查询，模型会自动屏蔽被软删除的数据；
+
+  ```php
+  $user = UserModel::select();
+  return json($user);
+  ```
+
+5. 在开启软删除功能的前提下，使用 withTrashed()方法取消屏蔽软删除的数据；
+
+  ```php
+  $user = UserModel::withTrashed()->select();
+  return json($user);
+  ```
+
+6. 如果只想查询被软删除的数据，使用 onlyTrashed()方法即可；
+
+  ```php
+  $user = UserModel::onlyTrashed()->select();
+  return json($user);
+  ```
+
+7. 如果想让某一条被软删除的数据恢复到正常数据，可以使用 restore()方法；
+
+  ```php
+  $user = UserModel::onlyTrashed()->find();
+  $user->restore();
+  ```
+
+8. 如果想让一条软删除的数据真正删除，在恢复正常后，使用 delete(true)；
+
+  ```php
+  $user = UserModel::onlyTrashed()->get(193);
+  $user->restore();
+  $user->delete(true);
+  ```

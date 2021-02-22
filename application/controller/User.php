@@ -326,4 +326,32 @@ class User extends Controller
         $user->list->username = '李白';
         $user->save();
     }
+
+    public function softDelete()
+    {
+//        Db::name('user')->where('id', 192)->useSoftDelete('delete_time', date('Y-m-d H:i:s'))->delete();
+//        return Db::getLastSql();
+
+//        $user = UserModel::get(194);
+//        // 软删除
+//        $user -> delete();
+//        // 真实删除
+//        $user -> delete(true);
+
+//        $user = UserModel::select();
+//        return json($user);
+
+//        $user = UserModel::withTrashed()->select();
+//        return json($user);
+
+//        $user = UserModel::onlyTrashed()->select();
+//        return json($user);
+
+//        $user = UserModel::onlyTrashed()->find();
+//        $user->restore();
+
+        $user = UserModel::onlyTrashed()->get(193);
+//        $user->restore();
+        $user->delete(true);
+    }
 }
