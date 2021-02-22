@@ -17,6 +17,8 @@ require __DIR__ . '/../thinkphp/base.php';
 
 // 支持事先使用静态方法设置Request对象和Config对象
 
+\think\facade\View::share('key', 'value'); //也支持数组
+
 // 执行应用并响应
 //Container::get('app')->bind('test')->run()->send();
 Container::get('app')->run()->send();
