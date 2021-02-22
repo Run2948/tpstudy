@@ -42,4 +42,19 @@ class User extends Model
     {
         return strtoupper($value);
     }
+
+    // 搜索器
+    public function searchEmailAttr($query, $value)
+    {
+        $query->where('email', 'like', $value . '%');
+
+        if (isset($data['sort'])) {
+            $query->order($data['sort']);
+        }
+    }
+
+    public function searchCreateTimeAttr($query, $value)
+    {
+        $query->whereBetweenTime('create_time', $value[0], $value[1]);
+    }
 }

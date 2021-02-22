@@ -62,11 +62,57 @@ class User
 //        })->select();
 //        return json($result);
 
-        $result = UserModel::WithAttr('status', function ($value) {
-            $status = [-1 => '删除', 0 => '禁用', 1 => '正常', 2 => '待审核'];
-            return $status[$value];
-        })->select();
-        return json($result);
+//        $result = UserModel::WithAttr('status', function ($value) {
+//            $status = [-1 => '删除', 0 => '禁用', 1 => '正常', 2 => '待审核'];
+//            return $status[$value];
+//        })->select();
+
+//        $result = UserModel::withSearch(['email', 'create_time'], [
+//            'email' => 'xiao',
+//            'create_time' => ['2014-1-1', '2017-1-1']
+//        ])->select();
+
+//        $result = UserModel::withSearch(['email', 'create_time'], [
+//            'email' => 'xiao',
+//            'create_time' => ['2014-1-1', '2017-1-1']
+//        ])->where('gender', '女')->select();
+
+
+//        $result = UserModel::withSearch(['email', 'create_time'], [
+//            'email' => 'xiao',
+//            'create_time' => ['2014-1-1', '2017-1-1'],
+//            'sort' => ['price' => 'desc']
+//        ])->select();
+
+
+//        $result = UserModel::withSearch(['email', 'create_time' => 'ctime'], [
+//            'email' => 'xiao',
+//            'ctime' => ['2014-1-1', '2017-1-1']
+//        ])->select();
+
+//        echo Db::getLastSql();
+
+        $result = UserModel::where('id', 111)->select();
+//        if ($result->isEmpty()) {
+//            return '没有数据！';
+//        }
+
+//        $result->hidden(['password'])->append(['nothing'])->withAttr('email', function ($value) {
+//            return strtoupper($value);
+//        });
+
+//        $result = UserModel::select()->filter(function ($data) {
+//            return $data['price'] > 100;
+//        });
+//        $result = UserModel::select()->where('price', '>', '100');
+
+//        $result = UserModel::select()->order('price', 'desc');
+//        return json($result);
+
+        $result1 = UserModel::where('price', '>', '80')->select();
+        $result2 = UserModel::where('price', '<', '100')->select();
+//        return json($result1->diff($result2));
+        return json($result2->intersect($result1));
     }
 
 
