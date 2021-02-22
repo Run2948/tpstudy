@@ -1778,3 +1778,121 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```php
   print_r($user->toJson());
   ```
+
+
+## JSON 字段
+
+### 一．数据库 JSON
+
+1. 数据库写入 JSON 字段，直接通过数组的方式即可完成；
+
+  ```php
+  $data = [
+      'username' => '辉夜',
+      'password' => '123',
+      'gender' => '女',
+      'email' => 'huiye@163.com',
+      'price' => 90,
+      'details' => '123',
+      'uid' => 1011,
+      'status' => 1,
+      'list' => ['username'=>'辉夜', 'gender'=>'女',
+      'email'=>'huiye@163.com'],
+  ];
+  Db::name('user')->insert($data);
+  ```
+
+2. 从上面写入可以看出，list 字段设置的就是 json，通过数组写入的就是 json；
+
+3. 但是，如果我要写入 details 这个 text 文本格式的字段，通过数组会报错；
+
+4. 这个时候，采用->json(['details'])方法来进行转换，也可以写入 json 数据；
+
+  ```php
+  'details' => ['content'=>123],
+  Db::name('user')->json(['details'])->insert($data);
+  ```
+
+5. 在查询上，也可以使用->json(['list,details'])方法来获取数据；
+
+  ```php
+  $user = Db::name('user')->json(['list','details'])->where('id', 173)->find();
+  return json($user);
+  ```
+
+6. 如果要将 json 字段里的数据作为查询条件，可以通过如下方式实现：
+
+  ```php
+  $user = Db::name('user')->json(['list','details'])->where('list->username', '辉夜')->find();
+  ```
+
+7. 如果想完全修改 json 数据，可以使用如下的方式实现：
+
+  ```php
+  $data['list'] = ['username'=>'李白', 'gender'=>'男'];
+  Db::name('user')->json(['list'])->where('id', 174)->update($data);
+  ```
+
+8. 如果只想修改 json 数据里的某一个项目，可以使用如下的方式实现：
+
+  ```php
+  $data['list->username'] = '李黑';
+  Db::name('user')->json(['list'])->where('id', 174)->update($data);
+  ```
+
+### 二．模型 JSON
+
+1. 使用模型方式去新增包含 json 数据的字段；
+
+  ```php
+  $user = new UserModel();
+  $user->username = '李白';
+  $user->password = '123';
+  $user->gender = '男';
+  $user->email = 'libai@163.com';
+  $user->price = 100;
+  $user->uid = 1011;
+  $user->status = 1;
+  $user->details = ['content'=>123];
+  $user->list = ['username'=>'辉夜', 'gender'=>'女','email'=>'huiye@163.com','uid'=>1011];
+  $user->save();
+  ```
+
+2. 对于本身不是 json 字段，想要写入 json 字段的字符字段，需要设置；
+
+  ```php
+  protected $json = ['details', 'list'];
+  ```
+
+3. 也可以通过对象的方式，进行对 json 字段的写入操作；
+
+  ```php
+  $list = new \StdClass();
+  $list->username = '辉夜';
+  $list->gender = '女';
+  $list->email = 'huiye@163.com';
+  $list->uid = 1011;
+  $user->list = $list;
+  ```
+
+4. 通过对象调用方式，直接获取 json 里面的数据；
+
+  ```php
+  $user = UserModel::get(179);
+  return $user->list->username;
+  ```
+
+5. 通过 json 的数据查询，获取一条数据；
+
+  ```php
+  $user = UserModel::where('list->username', '辉夜')->find();
+  return $user->list->email;
+  ```
+
+6. 更新修改 json 数据，直接通过对象方式即可；
+
+  ```php
+  $user = UserModel::get(179);
+  $user->list->username = '李白';
+  $user->save();
+  ```

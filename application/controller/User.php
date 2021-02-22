@@ -271,4 +271,59 @@ class User extends Controller
 //        print_r(UserModel::select()->toArray());
         print_r($user->toJson());
     }
+
+    public function json()
+    {
+        $data = [
+            'username' => '辉夜',
+            'password' => '123',
+            'gender' => '女',
+            'email' => 'huiye@163.com',
+            'price' => 90,
+//            'details' => '123',
+            'details' => ['content' => 123],
+            'uid' => 1011,
+            'status' => 1,
+            'list' => ['username' => '辉夜', 'gender' => '女', 'email' => 'huiye@163.com'],
+        ];
+//        Db::name('user')->insert($data);
+//        Db::name('user')->json(['details'])->insert($data);
+
+
+//        $user = Db::name('user')->json(['list','details'])->where('id', 173)->find();
+//        return json($user);
+
+//        $user = Db::name('user')->json(['list','details'])->where('list->username', '辉夜')->find();
+//        return json($user);
+
+//        $data['list'] = ['username' => '李白', 'gender' => '男'];
+//        Db::name('user')->json(['list'])->where('id', 174)->update($data);
+
+//        $data['list->username'] = '李黑';
+//        Db::name('user')->json(['list'])->where('id', 174)->update($data);
+    }
+
+    public function modelJson()
+    {
+//        $user = new UserModel();
+//        $user->username = '李白';
+//        $user->password = '123';
+//        $user->gender = '男';
+//        $user->email = 'libai@163.com';
+//        $user->price = 100;
+//        $user->status = 1;
+//        $user->details = ['content' => 123];
+//        $user->list = ['username' => '辉夜', 'gender' => '女', 'email' => 'huiye@163.com', 'uid' => 1011];
+//        $user->save();
+
+//        $user = UserModel::get(179);
+//        return $user->list->username;
+
+//        $user = UserModel::where('list->username', '辉夜')->find();
+//        return $user->list->email;
+
+        $user = UserModel::get(179);
+        $user->list->username = '李白';
+        $user->save();
+    }
 }

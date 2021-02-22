@@ -37,6 +37,9 @@ class User extends Model
     protected $insert = ['uid' => 1];
     protected $update = [];
 
+    // 设置 json 字段
+    protected $json = ['details', 'list'];
+
     // 设置全局查询
     protected function base($query)
     {
