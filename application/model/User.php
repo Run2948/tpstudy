@@ -25,6 +25,18 @@ class User extends Model
     // 设置 username 和 email 不允许被修改，如下：
     protected $readonly = ['username', 'email'];
 
+    // 设置类型转换
+    protected $type = [
+        'price' => 'integer',
+        'status' => 'boolean',
+        'create_time' => 'datetime:Y-m-d'
+    ];
+
+    // 数据自动完成
+//    protected $auto = ['email'];
+//    protected $insert = ['uid' => 1];
+//    protected $update = [];
+
     // 初始化方法
     protected static function init()
     {

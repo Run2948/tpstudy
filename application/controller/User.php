@@ -115,7 +115,6 @@ class User
         return json($result2->intersect($result1));
     }
 
-
     public function insert()
     {
 //        $user = new \app\model\User();
@@ -234,5 +233,11 @@ class User
 //        ]);
     }
 
+    public function typeConversion(){
+        $user = UserModel::get(21);
 
+        var_dump($user -> price);
+        var_dump($user -> status);
+        var_dump($user -> create_time);
+    }
 }
