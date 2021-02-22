@@ -2295,3 +2295,109 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```php+HTML
   {$a == $b ? '真' : '假'}
   ```
+
+
+
+## 模版的循环标签
+
+### 一．foreach 循环
+
+1. 控制前端先通过模型把相应的数据列表给筛选出来；
+
+  ```php
+  $list = UserModel::all();
+  $this->assign('list', $list);
+  return $this->fetch('user');
+  ```
+
+2. 在模版端使用对称的标签{foreach}...{/foreach}实现循环；
+
+  ```php+HTML
+  {foreach $list as $key=>$obj}
+  	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+  {/foreach}
+  ```
+
+3. 其中$list 是控制前端传递的数据集，$key 是 index 索引，$obj 是数据对象；
+
+4. 也可以在模版中直接执行模型数据调用，而不需要在控制器设置；
+
+  ```php+HTML
+  {foreach :model('user')->all() as $key=>$obj}
+  	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+  {/foreach}
+  ```
+
+### 二．volist 循环
+
+1. volist 也是将查询得到的数据集通过循环的方式进行输出；
+
+  ```php+HTML
+  {volist name='list' id='obj'}
+  	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+  {/volist}
+  ```
+
+2. volist 中的 name 属性表示数据总集，id 属性表示当前循环的数据单条集；
+
+3. volist 也可以直接使用模型对象获取数据集的方式进行循环输出；
+
+  ```php+HTML
+  {volist name=':model("user")->all()' id='obj'}
+  	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+  {/volist}
+  ```
+
+4. 使用 offset 属性和 length 属性从第 4 条开始显示 5 条，这里下标从 0 开始；
+
+  ```php+HTML
+  {volist name='list' id='obj' offset='3' length='5'}
+  	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+  {/volist}
+  ```
+
+5. 可以使用 eq 标签(下节课比较标签的知识点)，来实现奇数或偶数的筛选数据；
+
+  ```php+HTML
+  {volist name='list' id='obj' mod='2'}
+      {eq name='mod' value='0'}
+          {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+      {/eq}
+  {/volist}
+  ```
+
+6. 通过编译文件可以理解，mod=2 表示索引除以 2 得到的余数是否等于 0 或 1；
+
+7. 如果余数设置为 0，那么输出的即偶数，如果设置为 1，则输出的是奇数；
+
+8. 当然，切换到其它数字，也会有更多的排列效果；
+
+9. 使用 empty 属性，可以当没有任何数据的时候，实现输出指定的提示；
+
+  ```php+HTML
+  {volist name=':model("user")->where("id", 1000)->all()' id='obj' empty='没有任何数据'}
+  	{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+  {/volist}
+  ```
+
+10. empty 属性，可以是控制器端传递过来的变量，比如：empty='$empty'；
+
+11. 使用 key='k'，让索引从 1 开始计算，不指定就用{$i}，指定后失效；
+
+    ```php+HTML
+    {volist name='list' id='obj' key='k'}
+    	{$k}.{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+    {/volist}
+    ```
+
+### 三．for 循环
+
+1. for 循环，顾名思义，通过起始和终止值，结合步长实现的循环；
+
+  ```php+HTML
+  {for start='1' end='100' comparison='<' step='2' name='i'}
+  	{$i}
+  {/for}
+  ```
+
+  

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模版的循环标签</title>
+</head>
+<body>
+{foreach :model('user')->all() as $key=>$obj}
+    {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/foreach}
+
+<br/>
+
+{foreach $list as $key=>$obj}
+    {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/foreach}
+
+<hr/>
+
+{volist name=':model("user")->all()' id='obj'}
+    {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/volist}
+
+<br/>
+
+{volist name='list' id='obj'}
+    {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/volist}
+
+<br/>
+{volist name='list' id='obj' offset='3' length='5'}
+    {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/volist}
+
+<br/>
+{volist name='list' id='obj' mod='2'}
+    {eq name='mod' value='0'}
+        {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+    {/eq}
+{/volist}
+
+<br/>
+{volist name=':model("user")->where("id", 1000)->all()' id='obj' empty='没有任何数据'}
+    {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/volist}
+
+
+<br/>
+{volist name='list' id='obj' key='k'}
+    {$k}.{$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+{/volist}
+
+
+<hr/>
+{for start='1' end='100' comparison='<' step='2' name='i'}
+    {$i}
+{/for}
+
+</body>
+</html>

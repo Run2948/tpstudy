@@ -3,6 +3,7 @@
 namespace app\controller;
 
 use think\Controller;
+use app\model\User as UserModel;
 
 class See extends Controller
 {
@@ -90,5 +91,12 @@ class See extends Controller
         $this->assign('number', '14');
 
         return $this->fetch('var');
+    }
+
+    public function testLoop()
+    {
+        $list = UserModel::all();
+        $this->assign('list', $list);
+        return $this->fetch('user');
     }
 }
