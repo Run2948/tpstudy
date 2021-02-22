@@ -1969,3 +1969,48 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   $user->restore();
   $user->delete(true);
   ```
+
+
+## 模版引擎和视图渲染
+
+### 一．模版引擎
+
+1. MVC 中，M(模型)和 C(控制器)是前面我们所了解的内容；
+2. 而 V(视图)，也就是模版页面，是 MVC 中第三个核心内容；
+3. 模版引擎分为两种，一种内置的，一种外置作为插件引入的，我们用内置的即可；
+4. 内置的模版引擎的配置文件是 config/template.php；
+5. 默认情况下已经很好了，不需要修改任何参数，view_path 默认是 view 目录；
+
+### 二．视图渲染
+
+1. 在控制器端，我们首先继承一下控制器基类(不是必须的，助手函数也行)；
+
+2. 先采用第一种不带任何参数的最典型的做法(自动定位)，看它报错信息；
+
+  ```php
+  class See extends Controller
+  {
+      public function index()
+      {
+          //自动定位
+          return $this->fetch();
+      }
+  }
+  ```
+
+3. 模版路径为：当前模块/view/当前控制器名(小写)/当前操作(小写).html
+
+4. 如果你想制定一个输出的模版，可以在 fetch()方法传递相应的参数；
+
+  ```php
+  return $this->fetch('edit'); //指定模版
+  return $this->fetch('public/edit'); //指定目录下的模版
+  return $this->fetch('admin@public/edit'); //指定模块下的模版
+  return $this->fetch('/edit'); //view_path 下的模版
+  ```
+
+5. 如果没有继承 Controller 控制器的话，可以使用助手函数 view()方法；
+
+  ```php
+  return view('edit');
+  ```
