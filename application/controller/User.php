@@ -20,9 +20,32 @@ class User
 //        $result = UserModel::destroy(1081);
 
 //        $result = Db::name('user') -> select();
-        $result = UserModel::select();
+//        $result = UserModel::select();
 
-        return json($result);
+//        return json($result);
+
+//        $user = UserModel::get(81);
+//        $user = UserModel::where('username', '辉夜')->find();
+//        echo $user->username;
+
+//        $user = new UserModel();
+//        echo $user->getUserName();
+//
+
+//        $user = UserModel::all('79, 118, 128');
+//        $user = UserModel::all([79, 118, 128]);
+
+//        $user = UserModel::where('gender', '男')->order('id', 'asc')->limit(2)->select();
+
+//         $user = UserModel::where('id', 79)->value('username');
+//         $user = UserModel::whereIn('id',[79,118,128])->column('username','id');
+
+//        $user = UserModel::getByUsername('辉夜');
+//        $user = UserModel::getByEmail('huiye@163.com');
+
+        $user = UserModel::max('price');
+
+        return json($user);
     }
 
 
@@ -95,4 +118,54 @@ class User
             $query->where('id', '>', 80);
         });
     }
+
+    public function update()
+    {
+//        $user = UserModel::get(118);
+//        $user->username = '李黑';
+//        $user->email = 'lihei@163.com';
+//        $user->save();
+
+//        $user = UserModel::where('username', '李黑')->find();
+//        $user->username = '李白';
+//        $user->email = 'libai@163.com';
+
+//        $user->save();
+//        $user->force()->save();
+        //显示更新
+//        $user->isUpdate(true)->save();
+        //显示新增
+//        $user->isUpdate(false)->save();
+
+//        $user->price = Db::raw('price+1');
+
+//        $user->price = ['inc', 1];
+
+//        $user->save([
+//            'username' => '李黑',
+//            'email' => 'lihei@163.com'
+//        ], ['id' => 118]);
+
+//        $list = [
+//            ['id'=>118, 'username'=>'李白', 'email'=>'libai@163.com'],
+//            ['id'=>128, 'username'=>'李白', 'email'=>'libai@163.com'],
+//            ['id'=>129, 'username'=>'李白', 'email'=>'libai@163.com']
+//        ];
+//        $user = new UserModel();
+//        $user->saveAll($list);
+
+
+//        UserModel::where('id', 118)->update([
+//            'username' => '李黑',
+//            'email' => 'lihei@163.com'
+//        ]);
+
+//        UserModel::update([
+//            'id' => 118,
+//            'username' => '李黑',
+//            'email' => 'lihei@163.com'
+//        ]);
+    }
+
+
 }

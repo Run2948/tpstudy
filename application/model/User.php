@@ -17,4 +17,9 @@ class User extends Model
 //        parent::init();
 //        echo '初始化！';
     }
+
+    public function getUserName()
+    {
+        return self::where('username', '辉夜')->find()->getAttr('username');
+    }
 }
