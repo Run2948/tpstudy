@@ -18,4 +18,11 @@ class Block extends Controller
         $this->assign('title', '模版继承');
         return $this->fetch();
     }
+
+    public function other()
+    {
+        $this->assign('name', 'ThinkPHP');
+        $this->assign('demo_time',time());
+        return $this->fetch();
+    }
 }

@@ -39,9 +39,11 @@ return [
         '__CSS__' => 'static/css',
     ],
     // 配置开启模版布局
-    'layout_on' => true,
+    'layout_on' => false,
     // 默认的模板布局文件
     'layout_name' => 'public/layout',
     // 更改占位符标签，默认 {__CONTENT__}
-//    'layout_item' => '{__REPLACE__}'
+//    'layout_item' => '{__REPLACE__}',
+    // 预先加载的标签库
+    'taglib_pre_load' => 'app\common\taglib\Html',
 ];
