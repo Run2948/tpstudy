@@ -2400,4 +2400,109 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   {/for}
   ```
 
+
+## 模版的比较和定义标签
+
+### 一．比较标签
+
+1. {eq}..{/eq}标签，比较两个值是否相同，相同即输出包含内容；
+
+  ```php
+  $this->assign('username', 'Mr.Lee');
+  ```
+
+  ```php+HTML
+  {eq name='username' value='Mr.Lee'}
+  李先生
+  {/eq}
+  ```
+
+2. 属性 name 里是一个变量，$符号可加可不加；而 value 里是一个字符串；
+
+3. 如果 value 也需要是一个变量的话，那么 value 需要加上$后的变量；
+
+  ```php+HTML
+  {eq name='username' value='$username'}
+  李先生
+  {/eq}
+  ```
+
+4. {eq}标签有一个别名标签：{equal}，效果是一样的；
+
+5. 相对应的{neq}或{notequal}，实现相反的效果；
+
+  ```php+HTML
+  {neq name='username' value='Mr.Wang'}
+  	两个值不相等
+  {/neq}
+  ```
+
+6. 这一组标签也支持 else 操作，标签为：{else/}；
+
+  ```php+HTML
+  {eq name='username' value='Mr.Lee'}
+  	两个值相等
+  {else/}
+  	两个值不等
+  {/eq}
+  ```
+
+7. {gt}(>)、{egt}(>=)、{lt}(<)、{elt}(<=)、{heq}(===)和{nheq}(!==)；
+
+8. 除了相等和不等，还有上面六种比较形式；
+
+  ```php+HTML
+  {egt name='number' value='10'}
+  	大于等于 10
+  {else/}
+  	小于 10
+  {/egt}
+  ```
+
+9. 所有的标签都可以统一为{compare}标签使用，增加一个 type 方法指定即可；
+
+  ```php+HTML
+  {compare name='username' value='Mr.Lee' type='eq'}
+  两个值相等
+  {/compare}
+  ```
+
+### 二．定义标签
+
+1. 如果你想在模版文件中去定义一个变量，可以使用{assgin}标签；
+
+  ```php+HTML
+  {assign name='var' value='123'} //也支持变量 value='$name'
+  {$var}
+  ```
+
+2. 有变量的定义就会有常量的定义，可以使用{define}标签；
+
+  ```php+HTML
+  {define name='PI' value='3.1415926'}
+  {$Think.const.PI}
+  ```
+
+3. 有时，实在不知道在模版中怎么进行编码时，可以采用{php}标签进行原生编码；
+
+  ```php
+  {php}
+  echo '原生编码防止脱发';
+  {/php}
+  ```
+
+4. 要注意的是：原生编码就是 PHP 编码，不能再使用模版引擎的特殊编码方式；
+
+5. 比如{eq}，{$user.name}这些标签语法均不支持；
+
+6. 标签之间，是支持嵌套功能的，比如从列表中找到“樱桃小丸子”；
+
+  ```php+HTML
+  {foreach :model('user')->all() as $key=>$obj}
+      {eq name='obj.username' value='樱桃小丸子'}
+          {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+      {/eq}
+  {/foreach}
+  ```
+
   

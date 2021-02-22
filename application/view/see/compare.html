@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模版的比较和定义标签</title>
+</head>
+<body>
+{eq name='username' value='Mr.Lee'}
+李先生
+{/eq}
+
+<br/>
+{eq name='username' value='$username'}
+李先生
+{/eq}
+
+
+<br/>
+{neq name='username' value=''Mr.Wang'}
+王先生
+{/neq}
+
+<br/>
+{eq name='username' value='Mr.Lee'}
+两个值相等
+{else/}
+两个值不等
+{/eq}
+
+<br/>
+{egt name='number' value='10'}
+大于等于 10
+{else/}
+小于 10
+{/egt}
+
+
+<hr>
+
+{compare name='username' value='Mr.Lee' type='eq'}
+两个值相等
+{/compare}
+
+
+<hr/>
+{assign name='var' value='123'}
+{$var}
+
+{define name='PI' value='3.1415926'}
+{$Think.const.PI}
+
+{php}
+echo '原生编码防止脱发';
+{/php}
+
+{foreach :model('user')->all() as $key=>$obj}
+    {eq name='obj.username' value='樱桃小丸子'}
+        {$key}.{$obj.id}.{$obj.username}({$obj.gender}).{$obj.email}<br>
+    {/eq}
+{/foreach}
+
+</body>
+</html>

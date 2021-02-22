@@ -99,4 +99,13 @@ class See extends Controller
         $this->assign('list', $list);
         return $this->fetch('user');
     }
+
+    public function testCompare()
+    {
+        $this->assign('username', 'Mr.Lee');
+
+        $this->assign('number', 10);
+
+        return $this->fetch('compare');
+    }
 }
