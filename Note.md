@@ -2735,3 +2735,130 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```
 
 4. {js}和{css}只是别名而已，识别.js 还是.css 是根据后缀的；
+
+
+## 模版的布局和继承
+
+### 一．模版布局
+
+1. 默认情况下，不支持模版布局功能，需要在配置文件中开启；
+
+2. 在配置文件 template.php 中，配置开启模版布局功能；
+
+  ```php
+  'layout_on' => true,
+  ```
+
+3. 此时，执行上一节课的模版控制器，会发现提示缺少模版 `layout.html`；
+
+4. 这个默认的布局文件，是可以更改的，位置和名字均可配置；
+
+  ```php
+  'layout_name' => 'public/layout',
+  ```
+
+5. 我们清空上一节课 index.html 的模版代码，只写一个“主体”二字；
+
+6. 然后将所有的代码拷贝到 layout.html 的布局模版中去，删除本身的“主体”；
+
+7. 然后执行 index.html 模版时，怎么将主体嵌入到 layout.html 中去？
+
+8. 使用{__CONTENT__}类似魔术方法的标签来引入 index.html“主体”内容；
+
+  ```php
+  {include file='public/header,public/nav' title='$title' keywords='这是一个模版！'/}
+  {include file="../application/view/public/nav.html"/}
+  {__CONTENT__}
+  {include file='public/footer'/}
+  ```
+
+9. 你可以更改{__CONTENT__}，只要在配置文件中配置；
+
+  ```php
+  'layout_item' => '{__REPLACE__}'
+  ```
+
+10. 再强调：再测试的时候，如果更改了配置文件，务必删除 temp 下编译文件再刷新；
+
+11. 上面说的是第一种，配置文件下来开启布局，而第二种方式则不需要开启直接使用；
+
+12. 首先，你必须关闭第一种配置，我这里就直接注释掉了，然后使用{layout}标签；
+
+13. 只要在 index.html 的最上面加上如下代码，即可实现模版布局；
+
+    ```php
+    {layout name="public/layout" repalce='[__CONTENT__]'}
+    ```
+
+14. 第三种，直接在控制器端执行 layout(true)方法即可，false 表示临时关闭；
+
+    ```php
+    $this->view->engine->layout(true);
+    ```
+
+15. 这种方法，虽然不需要配置文件开启，但如果不用默认的路径，还是要配置路径等；
+
+### 二．模版继承
+
+1. 模版继承是另一种布局方式，这种布局的思路更加的灵活；
+
+2. 首先，我们要创建一个 public/base.html 的基模版文件，文件名随意；
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <title>{$title}</title>
+  </head>
+  <body>
+  </body>
+  </html>
+  ```
+
+3. 创建一个新的方法 extend 载入新的模版 extend.html，然后加载基模版；
+
+  ```php
+  {extend name='public/base'}
+  {extend name='../application/view/public/base.html'}
+  ```
+
+4. 对于模版基类里的变量{$title}，直接在控制器设置传值即可；
+
+  ```php
+  $this->assign('title', '模版');
+  ```
+
+5. 在基模版 base.html 中，设置几个可替换的区块部分，{block}标签实现；
+
+  ```php
+  {block name='nav'}nav{/block}
+  {block name='include'}{include file='public:nav'}{/block}
+  {block name='footer'} @ThinkPHP 版权所有 {/block}
+  ```
+
+6. 在 extend.html 模版中，改变 nav，变成自己所需要的部分；
+
+  ```php
+  {block name='nav'}
+  <ol>
+  <li>首页</li>
+  <li>分类</li>
+  <li>关于</li>
+  </ol>
+  {/block}
+  ```
+7. 在 base.html 中，{include}可以加载内容，而在 extend.html 可以改变加载；
+
+  ```php
+  {block name='include'}{include file='public:header'}{/block}
+  ```
+
+8. 在 base.html 中已设置的内容，可以通过{__block__}加载到 extend.html 中；
+
+  ```php
+  {block name='footer'}
+  本站来自： {__block__} | 翻版必究
+  {/block}
+  ```
+
