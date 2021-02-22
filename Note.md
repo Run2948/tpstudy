@@ -934,8 +934,8 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 2. 模型会自动对应数据表，并且有一套自己的命名规则；
 
 3. 模型类需要去除表前缀(tp_)，采用驼峰式命名，并且首字母大写；
-  `tp_user(表名) => User`
-  `tp_user_type(表名) => UserType`
+    `tp_user(表名) => User`
+    `tp_user_type(表名) => UserType`
 
 4. 如果担心设置的模型类名和 PHP 关键字冲突，可以开启应用类后缀；
 
@@ -994,3 +994,126 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 2. 数据库操作返回的列表是一个二维数组，而模型操作返回的是一个结果集；
 `[[]]` 和 `[{}]`
 
+
+## 模型添加与删除
+
+### 一．数据添加
+
+1. 使用实例化的方式添加一条数据，首先实例化方式如下，两种均可：
+
+  ```php
+  $user = new UserModel();
+  $user = new \app\model\User();
+  ```
+
+2. 设置要新增的数据，然后用 save()方法写入到数据库中，save()返回布尔值；
+
+  ```php
+  $user->username = '李白';
+  $user->password = '123';
+  $user->gender = '男';
+  $user->email = 'libai@163.com';
+  $user->price = 100;
+  $user->details = '123';
+  $user->uid = 1011;
+  $user->create_time = date('Y-m-d H:i:s');
+  $user->save();
+  ```
+
+3. 也可以通过 save()传递数据数组的方式，来新增数据；
+
+  ```php
+  $user = new UserModel();
+  $user->save([
+  'username' => '李白',
+  'password' => '123',
+  'gender' => '男',
+  'email' => 'libai@163.com',
+  'price' => 100,
+  'details' => '123',
+  'uid' => 1011,
+  'create_time' => date('Y-m-d H:i:s')
+  ]);
+  ```
+
+4. 模型新增也提供了 replace()方法来实现 REPLACE into 新增；
+
+  ```php
+  $user->replace()->save();
+  ```
+
+5. 当新增成功后，使用$user->id，可以获得自增 ID（主键需是 id）；
+
+  ```php
+  echo $user->id;
+  ```
+
+6. 使用 saveAll()方法，可以批量新增数据，返回批量新增的数组；
+
+  ```php
+  $dataAll = [
+      [
+      'username' => '李白 1',
+      'password' => '123',
+      'gender' => '男',
+      'email' => 'libai@163.com',
+      'price' => 100,
+      'details' => '123',
+      'uid' => 1011,
+      'create_time' => date('Y-m-d H:i:s')
+      ],
+      [
+      'username' => '李白 2',
+      'password' => '123',
+      'gender' => '男',
+      'email' => 'libai@163.com',
+      'price' => 100,
+      'details' => '123',
+      'uid' => 1011,
+      'create_time' => date('Y-m-d H:i:s')
+      ]
+  ];
+  $user = new UserModel();
+  print_r($user->saveAll($dataAll));
+  ```
+
+### 二．数据删除
+
+1. 使用 get()方法，通过主键(id)查询到想要删除的数据；
+
+  ```php
+  $user = UserModel::get(93);
+  ```
+
+2. 然后再通过 delete()方法，将数据删除，返回布尔值；
+
+  ```php
+  $user->delete();
+  ```
+
+3. 也可以使用静态方法调用 destroy()方法，通过主键(id)删除数据；
+
+  ```php
+  UserModel::destroy(92);
+  ```
+
+4. 静态方法 destroy()方法，也可以批量删除数据；
+
+  ```php
+  UserModel::destroy('80, 90, 91');
+  UserModel::destroy([80, 90, 91]);
+  ```
+
+5. 通过数据库类的查询条件删除；
+
+  ```php
+  UserModel::where('id', '>', 80)->delete();
+  ```
+
+6. 使用闭包的方式进行删除；
+
+  ```php
+  UserModel::destroy(function ($query) {
+  	$query->where('id', '>', 80);
+  });
+  ```

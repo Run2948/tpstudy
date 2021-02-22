@@ -11,4 +11,10 @@ class User extends Model
     // 指定数据表为 tp_one
 //    protected $table = 'tp_one';
 
+    // 初始化方法
+    protected static function init()
+    {
+//        parent::init();
+//        echo '初始化！';
+    }
 }
