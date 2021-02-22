@@ -10,9 +10,9 @@ class See extends Controller
     {
 //        parent::initialize();
 
-        $this->filter(function ($content) {
-            return str_replace("1", '<br/>', $content);
-        });
+//        $this->filter(function ($content) {
+//            return str_replace("1", '<br/>', $content);
+//        });
     }
 
     public function index()
@@ -56,8 +56,8 @@ class See extends Controller
 //            return str_replace("1", '<br/>', $content);
 //        })->fetch();
 
-        return view()->filter(function($content){
-            return str_replace("1",'<br/>',$content);
+        return view()->filter(function ($content) {
+            return str_replace("1", '<br/>', $content);
         });
     }
 
@@ -70,4 +70,19 @@ class See extends Controller
         ]);
     }
 
+    public function testVar()
+    {
+        $this->assign('name', 'ThinkPHP');
+
+        $data['username'] = '辉夜';
+        $data['email'] = 'huiye@163.com';
+        $this->assign('user', $data);
+
+        $obj = new \stdClass();
+        $obj->username = '辉夜';
+        $obj->email = 'huiye@163.com';
+        $this->assign('obj', $obj);
+
+        return $this->fetch('var');
+    }
 }

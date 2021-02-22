@@ -2107,3 +2107,84 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   	return str_replace("1",'<br/>',$content);
   });
   ```
+
+
+## 模版变量输出
+
+### 一．变量输出
+
+1. 上一节课视图赋值讲到过，模版的变量的输出方式，控制器实现赋值；
+
+  ```php
+  $this->assign('name', 'ThinkPHP');
+  ```
+
+2. 当模版位置创建好后，输出控制器的赋值变量时，说你用花括号和$符号；
+
+  ```php+HTML
+  {$name}
+  ```
+
+3. 当程序运行的时候，会在 runtime/temp 目录下生成一个编译文件；
+
+  ```php+HTML
+  <?php echo htmlentities($name); ?>
+  ```
+
+4. 如果传递的值是数组，那么编译文件也会自动相应的对应输出方式；
+
+  ```php
+  $data['username'] = '辉夜';
+  $data['email'] = 'huiye@163.com';
+  $this->assign('user', $data);
+  ```
+
+  ```php+HTML
+  模版调用：{$user.username}.{$user.email} //或{$user['email']}
+  编译文件：<?php echo htmlentities($user['username']); ?>
+  ```
+
+5. 如果传递的值是对象，那么编译文件也会自动相应的对应输出方式；
+
+  ```php
+  $obj = new \stdClass();
+  $obj->username = '辉夜';
+  $obj->email = 'huiye@163.com';
+  $this->assign('obj', $obj);
+  ```
+
+  ```php+HTML
+  模版调用：{$obj->username}.{$obj->email}
+  编译文件：<?php echo htmlentities($obj->username); ?>
+  ```
+
+6. 如果是模型对象的数据列表，数组和对象方式均可；
+
+### 二．其它输出
+
+1. 如果输出的变量没有值，可以直接设置默认值代替；
+
+  ```php+HTML
+  {$user.username|default='没有用户名'}
+  ```
+
+2. 使用$Think.xxx.yyy 方式，可以输出系统的变量；
+
+3. 系统变量有：$_SERVER、$_ENV、$_GET、$_POST、$_REQUEST、$_SESSION 和$_COOKIE；
+
+  ```php+HTML
+  {$Think.get.name} //其它雷同
+  ```
+
+4. 除了变量，常量也可以在模版直接输出；
+
+  ```php+HTML
+  {$Think.const.PHP_VERSION}
+  {$Think.PHP_VERSION}
+  ```
+
+5. 系统配置也可以直接在模版输出，配置参数可以在 config 文件下；
+
+  ```php+HTML
+  {$Think.config.default_return_type}
+  ```

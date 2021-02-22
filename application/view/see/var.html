@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模版变量输出</title>
+</head>
+<body>
+{$name | default = 'ThinkPHP'}
+
+<br/>
+{$user.username}.{$user['email']}
+
+<br/>
+{$obj->username}.{$obj->email}
+
+<br/>
+{$Think.get.key}
+
+{$Think.const.PHP_VERSION}
+{$Think.PHP_VERSION}
+
+{$Think.config.default_return_type}
+
+</body>
+</html>
