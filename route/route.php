@@ -106,7 +106,7 @@ Route::get('hello/:name', 'index/hello');
 //    ->ext('html')
 //    ->pattern(['id' => '\d+$', 'name' => '\w+$']);
 
-Route::miss('error/miss');
+//Route::miss('error/miss');
 
 //Route::group('col', function () {
 //    Route::get(':id', 'read');
@@ -122,12 +122,23 @@ Route::miss('error/miss');
 //    ->allowCrossDomain();
 
 // 想限制跨域请求的域名
-Route::get('col/:id', 'Collect/read')
-    ->ext('html')
-    ->header('Access-Control-Allow-Origin','http://localhost')
-    ->allowCrossDomain();
+//Route::get('col/:id', 'Collect/read')
+//    ->ext('html')
+//    ->header('Access-Control-Allow-Origin','http://localhost')
+//    ->allowCrossDomain();
 
+//Route::bind('admin');
+//Route::bind('index/User');
+//Route::bind('index/User/read');
 
+//Route::get('user/:id','User/read');
+
+// /index/user/edit/id/5 ->  /user/edit/id/5
+//Route::alias('user','index/User');
+//Route::alias('user','\app\index\controller\User');
+
+Route::alias('user', 'index/User', ['ext' => 'html']);
+Route::alias('user', 'index/User')->ext('html');
 
 return [
 

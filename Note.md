@@ -3455,8 +3455,8 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 5. 我们创建一个不同端口号或不同域名的 ajax 按钮，点击获取这个路由页面信息；
 
 6. 如果，没有开启跨域请求，则会爆出提醒：
-  已拦截跨源请求：同源策略禁止读取位于 http://localhost:8000/col/5.html 的远程资源。（原因：CORS 头缺
-  少 'Access-Control-Allow-Origin'）
+    已拦截跨源请求：同源策略禁止读取位于 http://localhost:8000/col/5.html 的远程资源。（原因：CORS 头缺
+    少 'Access-Control-Allow-Origin'）
 
 7. 开启后，即正常获取得到的数据；
 
@@ -3469,4 +3469,60 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ->allowCrossDomain();
   ```
 
-  
+
+
+## 路由的绑定和别名
+
+### 一．路由绑定
+
+1. 路由绑定可以简化 URL 和路由规则的定义，可以绑定到模块/控制器/操作；
+
+2. 由于本身不是规则，需要关闭强制路由来测试，本身绑定并不是定义路由；
+
+3. index 模块/User 控制器/read：http://.../index/user/read/id/5；
+
+  ```php
+  //绑定路由到 index 模块
+  Route::bind('index); http://.../user/read/id/5
+  //绑定路由到 User 控制器
+  Route::bind('index/User); http://.../read/id/5
+  //绑定路由到 read 操作
+  Route::bind('index/User/read); http://.../id/5
+  ```
+
+4. 当我们再创建一个 admin 模块，只要绑定到 admin 模块，开启路由就切换了；
+
+  ```php
+  Route::bind('admin');
+  Route::get('user/:id','User/read'); //未绑定则：admin/user/read
+  ```
+
+### 二．路由别名
+
+1. 给一个控制器起一个别名，可以通过别名自动生成一系列规则；
+
+2. 比如，给 index 模块下的 User 控制器创建别名：user，省去了模块 index；
+
+  ```php
+  Route::alias('user', 'index/User');
+  ```
+
+  http://localhost:8000/user/create
+  http://localhost:8000/user/edit/id/5
+  http://localhost:8000/user/read/id/5
+
+3. 也可以直接绑定到类，来实现相同的效果；
+
+  ```php
+  Route::alias('user', '\app\index\controller\User');
+  ```
+
+4. 也支持别名设置限定条件，比如 ext 等；
+
+  ```php
+  Route::alias('user', 'index/User', ['ext'=>'html']);
+  Route::alias('user', 'index/User')->ext('html');
+  ```
+
+**PS：这两个知识点，部分功能有些问题；而别名路由和前面的快捷路由在 PHP6 已经废
+弃，产生的问题自然在新版也没了；**

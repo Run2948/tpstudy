@@ -23,7 +23,7 @@ return [
     // 应用Trace
     'app_trace'              => false,
     // 是否支持多模块
-    'app_multi_module'       => false,
+    'app_multi_module'       => true,
     // 入口自动绑定模块
     'auto_bind_module'       => false,
     // 注册的根命名空间
@@ -97,7 +97,7 @@ return [
     // 是否开启路由延迟解析
     'url_lazy_route'         => false,
     // 是否强制使用路由
-    'url_route_must'         => true,
+    'url_route_must'         => false,
     // 合并路由规则
     'route_rule_merge'       => false,
     // 路由是否完全匹配
