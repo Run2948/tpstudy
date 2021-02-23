@@ -13,9 +13,9 @@ class Address extends Controller
         return "Address Index";
     }
 
-    public function detail($id)
+    public function details($id)
     {
-        return "Address Detail " . $id;
+        return "Address Details " . $id;
     }
 
     public function search($id, $uid)

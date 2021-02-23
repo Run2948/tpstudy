@@ -2992,7 +2992,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 ### 二．路由定义
 
 1. 在没有定义路由规则的情况下，我们访问 address/details 包含 id 的 URL 为：
-  http://localhost:8000/address/details/id/5 //或者.../id/5.html
+    http://localhost:8000/address/details/id/5 //或者.../id/5.html
 
 2. 将这个 URL 定义路由规则，在根目录 route 下的 Route.php 里配置；
 
@@ -3001,7 +3001,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```
 
 3. 当配置好路由规则后，会出现非法请求的错误，我们需要用路由规则的 URL 访问；
-  http://localhost:8000/details/5 //或者.../details/5.html
+    http://localhost:8000/details/5 //或者.../details/5.html
 
 4. 一般来说 GET 方法是用的最多的，所以我们使用 Route::get()最多，其它如下：
 
@@ -3012,7 +3012,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```
 
 5. 所有请求方式(快捷方式)：GET(get)、POST(post)、DELETE(delete)、PUT(put)
-  PATCH(patch)、*(any，任意请求方式)
+    PATCH(patch)、*(any，任意请求方式)
 
 6. 快捷方式，就是直接用 Route::get、Route::post 等方式即可，无须第三参数；
 
@@ -3059,3 +3059,78 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
     Route::get('details/:id', 'address/details')->name('det');
     return url('det', ['id'=>10]);
     ```
+
+
+
+## 路由的变量规则和闭包
+
+### 一．变量规则
+
+1. 系统默认的路由变量规则为\w+，即字母、数字和下划线；
+
+2. 如果我们需要对于具体的变量进行单独的规则设置，则需要通过 pattern()方法；
+
+3. 将 details 方法里的 id 传值，严格限制必须只能是数字\d+；
+
+  ```php
+  Route::get('details/:id', 'address/details')
+  ->name('det')
+  ->pattern('id', '\d+');
+  ```
+
+4. 也可以设置 search 方法的两个值的规则，通过数组的方式传递参数；
+
+  ```php
+  Route::get('search/:id/:uid', 'address/search')
+  ->pattern([
+      'id' => '\d+',
+      'uid' => '\d+'
+  ]);
+  ```
+
+5. 以上两种，均为局部变量规则，也可以直接在 Route.php 设置全局变量规则；
+
+  ```php
+  Route::pattern([
+      'id' => '\d+',
+      'uid' => '\d+'
+  ]);
+  ```
+
+6. 也支持使用组合变量规则方式，实现路由规则；
+
+  ```php
+  Route::get('details-<id>', 'address/details')->pattern('id', '\d+');
+  ```
+
+7. 动态组合的拼装，地址和参数如果都是模糊动态的，可以使用如下方法；
+
+  ```php
+  Route::get('details-:name-:id', 'Hello_:name/details')->pattern('id', '\d+');
+  ```
+
+8. 在不设定任何规则的情况下，系统默认为\w+，在配置文件中可以更改默认规则；
+
+  ```php
+  'default_route_pattern' => '[\w\-]+',
+  ```
+
+### 二．闭包支持
+
+1. 闭包支持我们可以通过 URL 直接执行，而不需要通过控制器和方法；
+
+  ```php
+  Route::get('think', function () {
+  	return 'hello,ThinkPHP5!';
+  });
+  ```
+
+2. 闭包支持也可以传递参数和动态规则；
+
+  ```php
+  Route::get('hello/:name', function ($name) {
+  	return 'Hello,' . $name;
+  });
+  ```
+
+  
