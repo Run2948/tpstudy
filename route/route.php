@@ -52,6 +52,24 @@ Route::get('/address/details-<id>', 'address/details')->pattern('id', '\d+');
 
 Route::get('/details-:name-:id', ':name/details')->pattern('id', '\d+');
 
+
+//支持多级路由  /group.address/details/id/5
+Route::get('details/:id', 'group.Address/details');
+
+//Route::get('details', 'group.Address/index?flag=1&status=2');
+
+Route::get('details', 'app\controller\group\Address@index');
+
+Route::get('stat', 'app\controller\group\Address::stat');
+
+// 路由重定向
+//Route::get('details/:id', 'http://www.liyanhui.com/details/:id')->status(302);
+Route::redirect('details/:id', 'http://www.liyanhui.com/details/:id', 302);
+
+// 路由模版传值
+//Route::view('see/:name', 'See/other');
+Route::view('see/:name', 'See/other', ['email'=>'huiye@163.com']);
+
 return [
 
 ];

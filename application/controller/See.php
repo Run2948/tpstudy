@@ -117,4 +117,9 @@ class See extends Controller
         return $this->fetch('condition');
     }
 
+    public function other()
+    {
+        $this->assign('name','ThinkPHP');
+        return $this->fetch();
+    }
 }

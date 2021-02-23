@@ -3133,4 +3133,73 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   });
   ```
 
-  
+
+
+## 路由的地址和缓存
+
+### 一．路由地址
+
+1. 路由的地址一般为：控制器/方法，如果多模块则：模块/控制器/方法；
+   
+    ```php
+    //默认 Index 控制器
+    Route::get('/', 'index');
+    //控制器/方法
+    Route::get('details/:id', 'Address/details');
+//模块/控制器/方法
+    Route::get('details/:id', 'index/Address/details');
+    ```
+    
+2. 支持多级控制器，并且支持路由到相应的地址；
+   
+    ```php
+    //目录为：application\controller\group
+    namespace app\controller\group;
+    //地址为：application\controller\group
+    http://localhost:8000/group.address/details/id/5
+//支持多级路由
+    Route::get('details/:id', 'group.Address/details');
+    ```
+    
+3. 支持动态路由地址以及额外参数地址；
+   
+    ```php
+    Route::get('details-:name-:id', 'Hello_:name/details');
+//获取隐式 GET 值：$this->request->param('flag');
+    Route::get('details/:id', 'Address/details?flag=1&status=1');
+    ```
+    
+4. 支持直接去执行方法，不单单是普通方法，还有静态方法；
+   
+    ```php
+    Route::get('details/:id', 'app\controller\Address@details');
+    Route::get('stat/:id', 'app\controller\Address::stat');
+    ```
+    
+5. 路由也支持重定向功能，实现一个外部跳转；
+   
+    ```php
+    Route::get('details/:id', 'http://www.liyanhui.com/details/:id')->status(302);
+    Route::redirect('details/:id', 'http://www.liyanhui.com/details/:id', 302);
+    ```
+
+6. 路由也可以对模版进行传值；
+
+    ```php
+    Route::view('see/:name', 'See/other');
+    Route::view('see/:name', 'See/other', ['email'=>'huiye@163.com']);
+    ```
+
+### 二．路由缓存
+
+1. 路由缓存可以极大的提高性能，需要在部署环境下才有效果，在 app.php 开启；
+
+    ```php
+    'route_check_cache' => true,
+    ```
+
+2. 为了测试路由缓存是否真的在起作用，可以通过一条命令行命令来清理缓存测试；
+
+    ```bash
+    >php think clear --route
+    ```
