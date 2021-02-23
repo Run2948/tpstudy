@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跨域提交</title>
+</head>
+<body>
+<input type="url" id="url" value="/blog" />
+<input type="button" class="button" value="GET"/>
+<input type="button" class="button" value="POST"/>
+<input type="button" class="button" value="PUT"/>
+<input type="button" class="button" value="DELETE"/>
+
+<script src="../static/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $('.button').click(function () {
+        $.ajax({
+            type: $(this).val(),
+            url: $('#url').val(),
+            success: function (res) {
+                console.log(res);
+            }
+        });
+    });
+</script>
+</body>
+</html>

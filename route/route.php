@@ -137,8 +137,18 @@ Route::get('hello/:name', 'index/hello');
 //Route::alias('user','index/User');
 //Route::alias('user','\app\index\controller\User');
 
-Route::alias('user', 'index/User', ['ext' => 'html']);
-Route::alias('user', 'index/User')->ext('html');
+//Route::alias('user', 'index/User', ['ext' => 'html']);
+//Route::alias('user', 'index/User')->ext('html');
+
+//Route::resource('blog', 'Blog');
+Route::resource('blog', 'Blog')
+    //相应的 delete($blog_id);
+//    ->vars(['blog'=>'blog_id']);
+//    ->only(['index','save','create'])
+    ->except(['read', 'delete', 'update']);
+
+Route::resource('blog.comment', 'Comment');
+//Route::resource('blog.comment', 'Comment')->vars(['blog'=>'blog_id']);
 
 return [
 

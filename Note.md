@@ -3526,3 +3526,127 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 **PS：这两个知识点，部分功能有些问题；而别名路由和前面的快捷路由在 PHP6 已经废
 弃，产生的问题自然在新版也没了；**
+
+
+
+## 资源路由
+
+### 一．资源路由
+
+1. 资源路由，采用固定的常用方法来实现简化 URL 的功能；
+
+2. 系统提供了一个命令，方便开发者快速生成一个资源控制器；
+
+  ```bash
+  php think make:controller index/Blog
+  ```
+
+3. 模块/控制器，默认在 controller 目录下，根据你的情况调整路径结构；
+
+  ```bash
+  php think make:controller Blog //单应用
+  php think make:controller ../index/controller/Blog //多应用
+  ```
+
+4. 模块/控制器，默认在 controller 目录下，根据你的情况调整路径结构；
+
+5. 从生成的多个方法，包含了显示、增删改查等多个操作方法；
+
+6. 在路由 route.php 文件下创建一个资源路由，资源名称可自定义；
+
+  ```php
+  Route::resource('blog', 'Blog'); //多应用即：index/Blog
+  ```
+
+7. 这里的 blog 表示资源规则名，Blog 表示路由的访问路径；
+
+8. 资源路由注册成功后，会自动提供以下方法，无须手动注册；
+
+9. GET 访问模式下：index(blog)，create(blog/create)，read(blog/:id)，edit(blog/:id/edit)
+
+10. POST 访问模式下：save(blog)；
+
+11. PUT 方式模式下：update(blog/:id)；
+
+12. DELETE 方式模式下：delete(blog/:id)；
+    http://localhost:8000/blog/ (index)
+    http://localhost:8000/blog/5 (read)
+    http://localhost:8000/blog/5/edit (edit)
+
+13. 对于 POST，是新增，一般是表单的 POST 提交，而 PUT 和 DELETE 用 AJAX 访问；
+
+14. 将跨域提交那个例子修改成.ajax，其中 type 设置为 DELETE 即可访问到；
+
+    ```php
+    $.ajax({
+        type : "DELETE",
+        url : "http://localhost:8000/blog/10",
+        success : function (res) {
+            console.log(res);
+        }
+    });
+    ```
+
+15. 默认的参数采用 id 名称，如果你想别的，比如：blog_id，则：
+    
+```php
+    ->vars(['blog'=>'blog_id']); //相应的 delete($blog_id)
+    ```
+    
+16. 也可以通过 only()方法限定系统提供的资源方法，比如：
+    
+```php
+    ->only(['index','save','create'])
+    ```
+    
+17. 还可以通过 except()方法排除系统提供的资源方法，比如：
+    
+```php
+    ->except(['read','delete','update'])
+    ```
+    
+18. 使用 rest()方法，更改系统给予的默认方法，1.请求方式；2.地址；3.操作；
+
+    ```php
+    Route::rest('create', ['GET', '/:id/add', 'add']);
+    //批量
+    Route::rest([
+        'save' => ['POST', '', 'store'],
+        'update' => ['PUT', '/:id', 'save'],
+        'delete' => ['DELETE', '/:id', 'destory'],
+    ]);
+    ```
+
+19. 使用嵌套资源路由，可以让上级资源对下级资源进行操作，创建 Comment 资源；
+
+    ```php
+    class Comment
+    {
+        public function read($id, $blog_id)
+        {
+        	return 'Comment id:'.$id.'，Blog id:'.$blog_id;
+        }
+        
+        public function edit($id, $blog_id)
+        {
+        	return 'Comment id:'.$id.'，Blog id:'.$blog_id;
+        }
+    }
+    ```
+
+20. 使用嵌套资源路由，可以让上级资源对下级资源进行操作，创建 Comment 资源；
+
+    ```php
+    Route::resource('blog.comment', 'Comment');
+    ```
+
+21. 资源嵌套生成的路由规则如下：
+    http://localhost:8000/blog/:blog_id/comment/:id
+    http://localhost:8000/blog/:blog_id/comment/:id/edit
+
+22. 嵌套资源生成的上级资源默认 id 为：blog_id，可以通过 vars 更改；
+
+    ```php
+    Route::resource('blog.comment', 'Comment')
+    ->vars(['blog'=>'blog_id']);
+    ```
