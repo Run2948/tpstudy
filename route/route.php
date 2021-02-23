@@ -150,6 +150,32 @@ Route::resource('blog', 'Blog')
 Route::resource('blog.comment', 'Comment');
 //Route::resource('blog.comment', 'Comment')->vars(['blog'=>'blog_id']);
 
+//Route::domain('news', function () {
+//    Route::get('edit/:id', 'Collect/edit');
+//});
+//Route::domain('news', [
+//    'edit/:id' => ['Collect/edit']
+//]);
+//Route::domain('news.abc.com', [
+//    'edit/:id' => ['Collect/edit']
+//]);
+
+//Route::domain(['news', 'blog', 'live'], function () {
+//    Route::get('edit/:id', 'Collect/edit');
+//});
+
+//Route::domain('news', 'admin');
+//Route::domain('news.abc.com', 'admin');
+//Route::domain('127.0.0.1', 'admin');
+
+Route::domain('*.news', [
+    'edit/:id' => ['Collect/edit']
+]);
+
+Route::domain('*', [
+    'edit/:id' => ['Collect/edit']
+]);
+
 return [
 
 ];

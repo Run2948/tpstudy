@@ -3591,20 +3591,20 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
     
 ```php
     ->vars(['blog'=>'blog_id']); //相应的 delete($blog_id)
-    ```
-    
+```
+
 16. 也可以通过 only()方法限定系统提供的资源方法，比如：
     
 ```php
     ->only(['index','save','create'])
-    ```
-    
+```
+
 17. 还可以通过 except()方法排除系统提供的资源方法，比如：
     
 ```php
     ->except(['read','delete','update'])
-    ```
-    
+```
+
 18. 使用 rest()方法，更改系统给予的默认方法，1.请求方式；2.地址；3.操作；
 
     ```php
@@ -3650,3 +3650,106 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
     Route::resource('blog.comment', 'Comment')
     ->vars(['blog'=>'blog_id']);
     ```
+
+
+
+## 域名路由
+
+### 一．域名路由
+
+1. 要使用域名路由，首先，在本地我们需要通过 hosts 文件来映射；
+
+2. 打开 `C:\Windows\System32\drivers\etc` 找到 hosts 文件；
+
+3. 在末尾添加一句：`127.0.0.1 news.abc.com` 映射二级域名；
+
+4. 再在末尾添加一句：`127.0.0.1 a.news.abc.com` 用于三级域名泛指；
+
+5. 此时，我们访问 news.abc.com 就直接映射到 localhost 里了；
+
+6. 如果想访问 thinkphp 独立的服务器，开启后，直接:8080 即可；
+  http://news.abc.com:8000
+
+7. 拿 Collect 控制器举例，复习一下路由的规则；
+
+  ```php
+  Route::get('edit/:id', 'Collect/edit');
+  ```
+
+8. 如果想限定在 news.abc.com 这个域名下才有效，通过域名路由闭包的形式；
+
+  ```php
+  Route::domain('news', function () {
+  	Route::get('edit/:id', 'Collect/edit');
+  });
+  ```
+
+9. 这里的 domain()即域名路由，第一参数，表示二级(子)域名的名称；
+
+10. 除了闭包方式，也可以通过数组的方式来设置域名路由；
+
+    ```php
+    Route::domain('news', [
+    	'edit/:id' => ['Collect/edit']
+    ]);
+    ```
+
+11. 除了二级(子)域名设置外，也可以设置完整域名；
+
+    ```php
+    Route::domain('news.abc.com', [
+    	'edit/:id' => ['Collect/edit']
+    ]);
+    ```
+
+12. 支持多个二级(子)域名，使用相同的路有规则；
+
+    ```php
+    Route::domain(['news', 'blog', 'live'], function () {
+    	Route::get('edit/:id', 'Collect/edit');
+    });
+    ```
+
+13. 可以作为方法，进行二级(子)域名的检测，或完整域名检测；
+
+    ```php
+    Route::get('edit/:id', 'Collect/edit')->domain('news');
+    Route::get('edit/:id', 'Collect/edit')->domain('news.abc.com');
+    ```
+
+### 二．域名绑定
+
+1. 在 app.php 中可以设置根域名，如果不设置，会默认自动获取；
+
+  ```php
+  'url_domain_root' => 'abc.com',
+  ```
+
+2. 当设置了根域名后，如果实际域名不符，将解析失败；
+
+3. 域名设置还支持绑定指定的模块，比如多应用的 admin 模块；
+
+  ```php
+  Route::domain('news', 'admin');
+  Route::domain('news.abc.com', 'admin');
+  Route::domain('127.0.0.1', 'admin');
+  ```
+
+4. 如果遇到三级域名，并且需要通用泛指，可以使用`*`通配符；
+
+  ```php
+  Route::domain('*.news', [
+  'edit/:id' => ['Collect/edit']
+  ]);
+  ```
+
+5. 而直接使用通配符`*`，则指定所有的二级域名；
+
+  ```php
+  Route::domain('*', [
+  'edit/:id' => ['Collect/edit']
+  ]);
+  ```
+
+**PS：还绑定到命名空间、类，额外参数、分组等操作和前面众多路由一样，不再重复
+讲解；**
