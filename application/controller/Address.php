@@ -33,4 +33,9 @@ class Address extends Controller
 //        return url('address/details', ['id' => 10]);
         return url('det', ['id' => 10]);
     }
+
+    public function getUser(\app\model\User $user)
+    {
+        return json($user);
+    }
 }

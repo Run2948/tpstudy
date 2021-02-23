@@ -3203,3 +3203,99 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
     ```bash
     >php think clear --route
     ```
+
+
+
+## 路由的参数和快捷路由
+
+### 一．路由参数
+
+1. 设置路由的时候，可以设置第三个数组参数，主要实施匹配检测和行为执行；
+
+2. ext 参数作用是检测 URL 后缀，比如：我们强制所有 URL 后缀为.html；
+
+  ```php
+  Route::get('details/:id', 'address/details', ['ext'=>'html']);
+  ...['ext'=>'html|shtml'] //支持多个
+  ```
+
+3. 第三数组参数也可以作为对象的方法存在，比如改下成如下形式；
+
+  ```php
+  Route::get('details/:id', 'address/details')->ext('html');
+  ```
+
+4. https 参数作用是检测是否为 https 请求，结合 ext 强制 html 如下；
+
+  ```php
+  Route::get('details/:id', 'address/details', ['ext'=>'html', 'https'=>true]);
+  Route::get('details/:id', 'address/details')->ext('html')->https();
+  ```
+
+5. 如果想让全局统一配置 URL 后缀的话，可以在 app.php 中设置；
+
+  ```php
+  //设置 false 为禁止后缀，空允许所有后缀
+  'url_html_suffix' => 'html',
+  ```
+
+6. denyExt 参数作用是禁止某些后缀的使用；
+
+  ```php
+  Route::get('details/:id', 'address/details')->denyExt('gif|jpg|png');
+  ```
+
+7. filter 参数作用是对额外参数进行检测；
+
+  ```php
+  Route::get('details/:id', 'address/details')->filter('id', 10);
+  ```
+
+8. model 参数作用是绑定到模型，第三参数设置 false 避免异常，也可以多参数；
+
+  ```php
+  Route::get('user/:id', 'address/getUser')->model('id', '\app\model\User');
+  ...->model('id', '\app\model\User',false);
+  Route::get('user/:id/:name'...->model('id&name', '\app\model\User');
+  ```
+
+9. option 参数作用是全局的路由进行配置，且可以多次调用；
+
+  ```php
+  Route::option('ext', 'html')->option('https', true);
+  ```
+
+### 二．快捷路由
+
+1. 快捷路由可以快速给控制器注册路由，还可以更加不同的请求类型设置前缀；
+
+  ```php
+  Route::controller('short', 'Short');
+  ```
+
+2. 快捷路由控制器和方法的编写原则，给方法前面加上 get 或 post 等请求类型；
+
+  ```php
+  class Short extends Controller
+  {
+      public function index()
+      {
+      return 'index';
+      }
+      
+      public function getInfo()
+      {
+      return 'getInfo';
+      }
+      
+      public function getList()
+      {
+      return 'getList';
+      }
+      
+      public function postInfo()
+      {
+      return 'postInfo';
+      }
+  }
+  ```
