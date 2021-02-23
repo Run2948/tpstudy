@@ -3418,3 +3418,55 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
     */
     class Collect extends Controller
     ```
+
+
+
+## 路由的 MISS 和跨域请求
+
+### 一．MISS 路由
+
+1. 全局 MISS,类似开启强制路由功能，匹配不到相应规则时自动跳转到 MISS；
+
+  ```php
+  Route::miss('public/miss');
+  ```
+
+2. 分组 MISS，可以在分组中使用 miss 方法，当不满足匹配规则时跳转到这里；
+
+  ```php
+  Route::miss('miss');
+  ```
+
+### 二．跨域请求
+
+1. 当不同域名进行跨域请求的时候，由于浏览器的安全限制，会被拦截；
+
+2. 所以，为了解除这个限制，我们通过路由 allowCrossDomain()来实现；
+
+  ```php
+  Route::get('col/:id', 'Collect/read')
+  ->ext('html')->allowCrossDomain();
+  ```
+
+3. 实现跨域比如没有实现的 header 头文件多了几条开头为 Access 的信息；
+
+4. 此时，这个页面，就可以支持跨域请求的操纵了；
+
+5. 我们创建一个不同端口号或不同域名的 ajax 按钮，点击获取这个路由页面信息；
+
+6. 如果，没有开启跨域请求，则会爆出提醒：
+  已拦截跨源请求：同源策略禁止读取位于 http://localhost:8000/col/5.html 的远程资源。（原因：CORS 头缺
+  少 'Access-Control-Allow-Origin'）
+
+7. 开启后，即正常获取得到的数据；
+
+8. 如果你想限制跨域请求的域名，则可以增加一条参数；
+
+  ```php
+  Route::get('col/:id', 'Collect/read')
+  ->ext('html')
+  ->header('Access-Control-Allow-Origin','http://localhost')
+  ->allowCrossDomain();
+  ```
+
+  

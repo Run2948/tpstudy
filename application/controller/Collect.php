@@ -37,4 +37,9 @@ class Collect extends Controller
     {
         return 'your name:' . $name;
     }
+
+    public function miss()
+    {
+        return 'Collect 路由规则不存在, 404！';
+    }
 }

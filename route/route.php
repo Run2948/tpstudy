@@ -106,6 +106,29 @@ Route::get('hello/:name', 'index/hello');
 //    ->ext('html')
 //    ->pattern(['id' => '\d+$', 'name' => '\w+$']);
 
+Route::miss('error/miss');
+
+//Route::group('col', function () {
+//    Route::get(':id', 'read');
+////    Route::get(':name', 'who');
+//    Route::miss('miss');
+//})->prefix('Collect/')
+//    ->ext('html')
+//    ->pattern(['id' => '\d+$', 'name' => '\w+$']);
+
+// 跨域请求
+//Route::get('col/:id', 'Collect/read')
+//    ->ext('html')
+//    ->allowCrossDomain();
+
+// 想限制跨域请求的域名
+Route::get('col/:id', 'Collect/read')
+    ->ext('html')
+    ->header('Access-Control-Allow-Origin','http://localhost')
+    ->allowCrossDomain();
+
+
+
 return [
 
 ];
