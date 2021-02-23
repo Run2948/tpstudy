@@ -87,7 +87,24 @@ Route::get('hello/:name', 'index/hello');
 //Route::option('ext', 'html');
 //Route::option('ext', 'html')->option('https', true);
 
-Route::controller('short', 'Short');
+//Route::controller('short', 'Short');
+
+//Route::group('col', [
+//    ':id' => 'Collect/read',
+//    ':name' => 'Collect/who'
+//])->ext('html')->pattern(['id' => '\d+$', 'name' => '\w+$']);
+
+//Route::group('col', function () {
+//    Route::get(':id', 'Collect/read');
+//    Route::get(':name', 'Collect/who');
+//})->ext('html')->pattern(['id' => '\d+$', 'name' => '\w+$']);
+
+//Route::group('col', function () {
+//    Route::get(':id', 'read');
+//    Route::get(':name', 'who');
+//})->prefix('Collect/')
+//    ->ext('html')
+//    ->pattern(['id' => '\d+$', 'name' => '\w+$']);
 
 return [
 
