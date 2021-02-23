@@ -168,13 +168,18 @@ Route::resource('blog.comment', 'Comment');
 //Route::domain('news.abc.com', 'admin');
 //Route::domain('127.0.0.1', 'admin');
 
-Route::domain('*.news', [
-    'edit/:id' => ['Collect/edit']
-]);
+//Route::domain('*.news', [
+//    'edit/:id' => ['Collect/edit']
+//]);
 
-Route::domain('*', [
-    'edit/:id' => ['Collect/edit']
-]);
+//Route::domain('*', [
+//    'edit/:id' => ['Collect/edit']
+//]);
+
+Route::get('bc', 'Blog/create'); // /bc.html
+Route::get('bl/cr', 'Blog/create'); // /bl/cr.html
+
+Route::get('read/:id', 'Blog/read');
 
 return [
 

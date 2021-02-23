@@ -3668,7 +3668,7 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 5. 此时，我们访问 news.abc.com 就直接映射到 localhost 里了；
 
 6. 如果想访问 thinkphp 独立的服务器，开启后，直接:8080 即可；
-  http://news.abc.com:8000
+    http://news.abc.com:8000
 
 7. 拿 Collect 控制器举例，复习一下路由的规则；
 
@@ -3753,3 +3753,92 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
 
 **PS：还绑定到命名空间、类，额外参数、分组等操作和前面众多路由一样，不再重复
 讲解；**
+
+
+
+## 路由的 URL 生成
+
+### 一．域名路由
+
+1. 之前所有的 URL，都是手动键入的，而路由也提供了一套生成方法；
+
+  ```php
+  Url::build('地址表达式',['参数'],['URL 后缀'],['域名'])
+  url('地址表达式',['参数'],['URL 后缀'],['域名'])
+  ```
+
+2. 在 Collect 演示生成，拿 Blog 来实现 URL 地址；
+
+3. 使用 build()方法，只传一个控制器时，会被误认为 Collect 下的 blog 方法；
+
+  ```php
+  Url::build('Blog'); // /collect/blog.html
+  ```
+
+4. 在没有设置路由的情况下，传递一个控制器以及操作方法；
+
+  ```php
+  Url::build('Blog/create'); // /blog/create.html
+  ```
+
+5. 如果设置了对应路由，第 4 条生成的 URL 会相应的改变；
+
+  ```php
+  Route::get('bc', 'Blog/create'); // /bc.html
+  Route::get('bl/cr', 'Blog/create'); // /bl/cr.html
+  ```
+
+6. 下面是没有设置路由和设置路由的带参数的 URL 生成；
+
+  ```php
+  Url::build('Blog/read', 'id=5'); // /blog/read/id/5.html
+  Url::build('Blog/read', 'id=5'); // /read/5.html
+  ```
+
+7. 参数部分，也可以用数组的方式，当然，多参数也支持；
+
+  ```php
+  Url::build('Blog/read', ['id'=>5]);
+  Url::build('Blog/read', 'id=5&uid=10');
+  Url::build('Blog/read', ['id'=>5, 'uid'=>10]);
+  ```
+
+8. 也可以使用助手函数 url 直接来设置；
+
+  ```php
+  url('Blog/read', ['id'=>5]);
+  ```
+
+9. 也可以使用普通的地址来设置 url；
+
+  ```php
+  Url::build('Blog/read?id=5');
+  ```
+
+10. 也可以使用和路由规则配对的方式设置 url；
+
+    ```php
+    Url::build('/read/5');
+    ```
+
+11. 在 app.php 可以设置默认 html 后缀，也可以在方法第三个参数设置；
+
+    ```php
+    url('Blog/edit', ['id'=>5], 'shtml');
+    ```
+
+12. 使用#name，可以生成一个带锚点的 url；
+
+    ```php
+    url('Blog/edit#name', ['id'=>5]);
+    ```
+
+13. 使用 `Url::root('/index.php')`在 URL 前面加上一个 index.php；
+
+14. 但这个添加需要整体考虑路径是否支持或正确，否则无法访问；
+
+15. 在本身有 index.php 的时候，使用 `Url::root('/')` 隐藏；
+
+    ```php
+    Url::root('/index.php');
+    ```
