@@ -181,6 +181,8 @@ Route::get('bl/cr', 'Blog/create'); // /bl/cr.html
 
 Route::get('read/:id', 'Blog/read');
 
+Route::get('edit/:id', 'Reply/edit');
+
 return [
 
 ];

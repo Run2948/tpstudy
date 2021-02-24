@@ -11,6 +11,13 @@
 <input type="button" class="button" value="PUT"/>
 <input type="button" class="button" value="DELETE"/>
 
+<hr/>
+
+<form action="/reply" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" />
+    <input type="submit" value="提交">
+</form>
+
 <script src="../static/js/jquery.min.js"></script>
 <script type="text/javascript">
     $('.button').click(function () {
