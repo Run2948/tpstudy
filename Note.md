@@ -4062,3 +4062,73 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   dump(input('param.name', '', 'htmlspecialchars')); //过滤器
   dump(input('param.id/d')); //设置强制转换
   ```
+
+
+
+## 请求类型和 HTTP 头信息
+
+### 一．请求类型
+
+1. 有时，我们需要判断 Request 的请求类型，比如 GET、POST 等等；
+
+2. 可以使用 method()方法来判断当前的请求类型，当然，还有很多专用的请求判断；
+
+![image-20210224213603904](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210224213603904.png)
+
+3. 使用普通表单提交，通过 method() 方法获取类型；
+    ```html
+    <form action="http://localhost/tp5.1/public/rely" method="post">
+        <input type="text" name="name" value="Lee">
+        <input type="submit" value="提交">
+    </form>
+    ```
+    ```php
+    return Request::method();
+    ```
+
+4. 在表单提交时，我们也可以设置请求类型伪装，设置隐藏字段_method；
+
+5. 而在判断请求，使用 method(true)可以获取原始请求，否则获取伪装请求；
+
+  ```php
+<form action="http://localhost/tp5.1/public/rely" method="post">
+    <input type="hidden" name="_method" value="PUT">
+    <input type="text" name="name" value="Lee">
+    <input type="submit" value="提交">
+</form>  
+  ```
+
+  ```php
+  Request::method(true);
+  ```
+
+6. 如果想更改请求伪装变量类型的名称，可以在 app.php 中更改；
+
+  ```php
+  'var_method' => '_method',
+  ```
+
+7. AJAX/PJAX 伪装，使用?_ajax=1 和?_pjax=1，并使用 isAjax()和 isPjax()；
+
+  ```php
+  //.../rely?_ajax=1 
+  dump(Request::isAjax());
+  ```
+
+8. 这里需要用 isAjax()和 isPjax()来判断，用 method 无法判断是否为 a(p)jax；
+
+9. 在 app.php 也可以更改 ajax 和 pjax 的名称；
+
+  ```php
+  'var_ajax' => '_ajax',
+  'var_pjax' => '_pjax', 
+  ```
+
+### 二．HTTP 头信息
+
+1. 使用 header()方法可以输出 HTTP 头信息，返回是数组类型，也可单信息获取；
+
+  ```php
+  dump(Request::header());
+  dump(Request::header('host'));
+  ```

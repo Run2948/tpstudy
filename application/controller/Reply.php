@@ -62,6 +62,21 @@ class Reply
         //获取所有请求的变量，包含上传变量，过滤
         dump(Request::param(true));
 
+
+        dump(Request::method());
+        // 在判断请求，使用 method(true)可以获取原始请求，否则获取伪装请求
+        dump(Request::method(true));
+        dump(Request::isGet());
+        dump(Request::isPost());
+        dump(Request::isPut());
+
+
+        dump(Request::isAjax());
+
+        dump(Request::header());
+        dump(Request::header('host'));
+
+
         return Request::param('name');
     }
 
