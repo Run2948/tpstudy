@@ -41,6 +41,7 @@ use think\Controller;
 
 
 use think\facade\Request;
+use think\facade\Url;
 
 class Reply
 {
@@ -87,7 +88,7 @@ class Reply
 
     public function edit($id)
     {
-        echo $id.'<br/>';
+        echo $id . '<br/>';
         dump(Request::param());
         dump(Request::param('id'));
 
@@ -106,15 +107,15 @@ class Reply
 
         // 仅获取指定变量
         dump(Request::only('id,name'));
-        dump(Request::only(['id','name']));
-        dump(Request::only(['id'=>1,'name'=>'nodata']));
-        dump(Request::only(['id','name'], 'post'));
+        dump(Request::only(['id', 'name']));
+        dump(Request::only(['id' => 1, 'name' => 'nodata']));
+        dump(Request::only(['id', 'name'], 'post'));
 
         // 排除某些变量
         dump(Request::except('id,name'));
-        dump(Request::except(['id','name']));
-        dump(Request::except(['id'=>1,'name'=>'nodata']));
-        dump(Request::except(['id','name'], 'post'));
+        dump(Request::except(['id', 'name']));
+        dump(Request::except(['id' => 1, 'name' => 'nodata']));
+        dump(Request::except(['id', 'name'], 'post'));
 
         // 强制指定参数的类型
         dump(Request::param('id/d'));
@@ -127,6 +128,16 @@ class Reply
         dump(input('param.name', 'nodata')); //默认值
         dump(input('param.name', '', 'htmlspecialchars')); //过滤器
         dump(input('param.id/d')); //设置强制转换
+    }
+
+    public function url()
+    {
+        return Url::build() . ' ' . Request::ext();
+    }
+
+    public function get($id, $name)
+    {
+        return 'get: id=' . $id .', name='.$name;
     }
 }
 
