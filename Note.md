@@ -3842,3 +3842,104 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
     ```php
     Url::root('/index.php');
     ```
+
+
+
+## 请求对象和信息
+
+一．请求对象
+1. 当控制器继承了控制器基类时，自动会被注入 Request 请求对象的功能；
+
+  ```php
+  class Rely extends Controller
+  {
+      public function index()
+      {
+      	return $this->request->param('name');
+      }
+  }
+  ```
+
+2. Request 请求对象拥有一个 param 方法，传入参数 name，可以得到相应的值；
+
+3. 如果我们不继承控制器基类，可是自行注入 Request 对象，依赖注入后面会讲；
+
+  ```php
+  use think\Request;
+  class Rely
+  {
+      public function index(Request $request)
+      {
+      	return $request->param('name');
+      }
+  }
+  ```
+
+4. 还可以通过构造方法进行注入，通过构造注入，就不需要每个方法都注入一遍；
+
+  ```php
+  use think\Request;
+  class Rely
+  {
+      protected $request;
+      
+      public function __construct(Request $request)
+      {
+      	$this->request = $request;
+      }
+      
+      public function index()
+      {
+      	return $this->request->param('name');
+      }
+  }
+  ```
+
+5. 使用 Facade 方式应用于没有进行依赖注入时使用 Request 对象的场合；
+
+  ```php
+  use think\facade\Request;
+  class Rely
+  {
+      public function index()
+      {
+      	return Request::param('name');
+      }
+  }
+  ```
+
+6. 使用助手函数 request()方法也可以应用在没有依赖注入的场合；
+
+  ```php
+  class Rely
+  {
+      public function index()
+      {
+      	return request()->param('name');
+      }
+  }
+  ```
+
+二．请求信息
+
+1. Request 对象除了 param 方法外，还有一些请求的固定信息，如表：
+
+![image-20210224102721942](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210224102721942.png)
+
+2. 上表的调用方法，直接调用即可，无须传入值，只有极个别如果传入 true 获取完
+    整 URL 的功能；
+    
+    ```php
+    Request::url();
+    // 获取完整 URL 地址 包含域名
+    Request::url(true);
+    // 获取当前 URL（不含 QUERY_STRING） 不带域名
+    Request::baseFile();
+    // 获取当前 URL（不含 QUERY_STRING） 包含域名
+    Request::baseFile(true);
+    // 获取 URL 访问根地址 不带域名
+    Request::root();
+    // 获取 URL 访问根地址 包含域名
+    Request::root(true);
+    ```
+
