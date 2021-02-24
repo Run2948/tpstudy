@@ -176,10 +176,10 @@ Route::resource('blog.comment', 'Comment');
 //    'edit/:id' => ['Collect/edit']
 //]);
 
-Route::get('bc', 'Blog/create'); // /bc.html
-Route::get('bl/cr', 'Blog/create'); // /bl/cr.html
+//Route::get('bc', 'Blog/create'); // /bc.html
+//Route::get('bl/cr', 'Blog/create'); // /bl/cr.html
 
-Route::get('read/:id', 'Blog/read');
+//Route::get('read/:id', 'Blog/read');
 
 Route::get('edit/:id', 'Reply/edit');
 

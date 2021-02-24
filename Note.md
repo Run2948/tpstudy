@@ -4223,3 +4223,72 @@ SELECT * FROM `tp_user` WHERE (`email` LIKE 'xiao%' OR `email` LIKE 'wu%')
   ```php
   Route::get('edit/:id', 'Rely/edit')->cache(3600);
   ```
+
+
+
+##  响应重定向和文件下载
+
+### 一．响应操作
+
+1. 响应输出，之前已经都掌握了，包括 return、json()和 view()；
+
+2. return 默认会输出 html 格式，配置文件默认设定的 `default_return_type`；
+
+3. 而背后是 response 对象，可以用 response()输出达到相同的效果；
+
+  ```php
+  return response($data);
+  ```
+
+4. 使用 response()方法可以设置第二参数，状态码，或调用 code()方法；
+
+  ```php
+  return response($data, 201);
+  return response($data)->code(202);
+  ```
+
+5. 使用 json()、view()方法和 response()返回的数据类型不同，效果一样；
+
+  ```php
+  return json($data, 201);
+  return json($data)->code(202);
+  ```
+
+6. 不但可以设置状态码，还可以设置 header()头文件信息；
+
+  ```php
+  return json($data)->code(202)
+  ->header(['Cache-control' => 'no-cache,must-revalidate']);
+  ```
+
+### 二．重定向
+
+1. 使用 redirect()方法可以实现页面重定向，需要 return 执行；
+
+  ```php
+  return redirect('http://www.baidu.com');
+  ```
+
+2. 站内重定向，直接输入路由地址或相对地址即可，需要用顶级域名，二级会错误；
+
+  ```php
+  return redirect('edit/5');
+  return redirect('/address/details/id/5');
+  ```
+
+3. 也可以通过 params()方法传递数组参数键值对的方式，进行跳转；
+
+  ```php
+  return redirect('/address/details')->params(['id'=>5]);
+  return redirect('/address/details', ['id'=>5]);
+  ```
+
+### 三．文件下载
+
+1. 文字下载和图片下载都使用 download()方法即可，路径为实际路径；
+
+  ```php
+  return \download('image.jpg', 'my');
+  $data = '这是一个测试文件';
+  return \download($data, 'test.txt', true);
+  ```

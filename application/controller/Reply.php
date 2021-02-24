@@ -137,7 +137,37 @@ class Reply
 
     public function get($id, $name)
     {
-        return 'get: id=' . $id .', name='.$name;
+        return 'get: id=' . $id . ', name=' . $name;
+    }
+
+    public function res()
+    {
+        $data = 'Hello, World';
+//        return response($data,201);
+//        return response($data)->code(202);
+        return response($data)->code(202)->header(['Cache-control' => 'no-cache,must-revalidate']);
+    }
+
+    public function red()
+    {
+//        return redirect('http://www.baidu.com');
+
+//        return redirect('edit/5');
+
+//        return redirect('/address/details/id/5');
+
+        return redirect('/address/details')->params(['id' => 5]);
+    }
+
+    public function image()
+    {
+        return download('static/img/timg.jpg', '大圣归来.jpg');
+    }
+
+    public function text()
+    {
+        $data = '这是一个测试文件';
+        return download($data, 'test.txt', true);
     }
 }
 
