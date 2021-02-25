@@ -59,7 +59,20 @@ class Inject extends Controller
 
         // 来自中间件的值
 //        return $request->middle_name;
-        return \think\facade\Request::param('middle_name');
+//        return \think\facade\Request::param('middle_name');
+
+//        throw new Exception('异常消息', 10086);
+
+//        echo 0/0;
+
+//        try {
+//            echo 0/0;
+//        } catch (ErrorException $e)
+//        {
+//            echo '发生错误：'.$e->getMessage();
+//        }
+
+        abort(404, '页面不存在');
     }
 
     public function test()

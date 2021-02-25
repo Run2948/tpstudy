@@ -17,3 +17,6 @@ use \think\Facade;
 Facade::bind([
     'app\facade\Test' => 'app\common\Test'
 ]);
+
+//用错误级别关闭异常
+//error_reporting(0);

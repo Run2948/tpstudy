@@ -142,5 +142,9 @@ return [
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
-
+    // 自定义异常模板
+    'http_exception_template' => [
+        // 定义 404 错误的模板文件地址
+        404 => Env::get('app_path') . '404.html',
+    ]
 ];
