@@ -4921,3 +4921,113 @@ return app('request')->param('name');
     ```php
     'max_files' => 2,
     ```
+
+
+
+## 验证器
+
+### 一．验证器定义
+
+1. 验证器的使用，我们必须先定义它，系统提供了一条命令直接生成想要的类；
+
+  ```bash
+  php think make:validate User
+  ```
+
+2. 这条命令会自动在应用目录下生成一个 validate 文件夹，并生成 User.php 类；
+
+  ```php
+  class User extends Validate
+  ```
+
+3. 自动生成了两个属性：$rule 表示定义规则，$message 表示错误提示信息；
+
+  ```php
+  protected $rule = [
+      'name' => 'require|max:20', //不得为空，不得大于 20 位
+      'price' => 'number|between:1,100', //必须是数值，1-100 之间
+      'email' => 'email' //邮箱格式要正确
+  ];
+  
+  protected $message = [
+      'name.require' => '姓名不得为空',
+      'name.max' => '姓名不得大于 20 位',
+      'price.number' => '价格必须是数字',
+      'price.between' => '价格必须 1-100 之间',
+      'email' => '邮箱的格式错误'
+  ];
+  ```
+
+4. 如果不设置$message 定义的话，将提示默认的错误信息；
+
+5. 验证器定义好了之后，我们需要进行调用测试，创建一个 Verify.php 控制器；
+
+  ```php
+  $data = [
+  'name' => '蜡笔小新',
+  'price' => 90,
+  'email' => 'xiaoxin@163.com',
+  ];
+  $validate = new \app\validate\User();
+  if (!$validate->check($data)) {
+  	dump($validate->getError());
+  }
+  ```
+
+6. 控制器类还提供了一个更加方便验证的方法，可以更容易的进行编码；
+
+  ```php
+  $result = $this->validate([
+  'name' => '蜡笔小新',
+  'price' => 90,
+  'email' => 'xiaoxin@163.com',
+  ], '\app\validate\User');
+  if ($result !== true) {
+  	dump($result);
+  }
+  ```
+
+7. 默认情况下，一旦有数据验证不符合规则，就立刻停止验证进行返回；
+
+8. 如果，我们要验证所有的错误信息，那需要手动开启批量验证；
+
+  ```php
+  protected $batchValidate = true;
+  ```
+
+9. 默认情况下，验证失败后不会抛出异常，需要手动设置，如下：
+
+  ```php
+  protected $failException = true;
+  ```
+
+10. 系统提供了常用的规则让开发者直接使用，也可以自行定义独有的特殊规则；
+
+    ```php
+    protected $rule = [
+    'name' => 'require|max:20|checkName:李炎恢',
+    ];
+    
+    //自定义规则，名称中不得是“李炎恢”
+    protected function checkName($value, $rule)
+    {
+    	return $rule != $value ? true : '名称不得是“李炎恢”';
+    }
+    ```
+
+11. 对于自定义规则中，一共可以有五个参数，我们分别了解一下；
+
+    ```php
+    protected function checkName($value, $rule, $data, $field, $title)
+    {
+    	dump($data); //所有数据信息
+    	dump($field); //当前字段名
+    	dump($title); //字段描述，没有就是字段名
+    }
+    ```
+
+12. 如何设置字段描述，只要在字段名用|后设置即可：
+
+    ```php
+    'name|用户名' => 'require|max:20|checkName:李炎恢',
+    ```

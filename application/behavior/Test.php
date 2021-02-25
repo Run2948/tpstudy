@@ -13,7 +13,7 @@ class Test
 
     public function appInit($params)
     {
-        echo '初始化的行为被触发！';
+//        echo '初始化的行为被触发！';
     }
 
     public function eat($params)
