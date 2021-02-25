@@ -4410,3 +4410,73 @@ return app('request')->param('name');
 11. 大家会发现，这个不是我们之前学过的 Request::param()么？对！
 12. 也就是说，实现同一个效果可以由容器的 bind()和 app()实现，也可以使用依赖
 注入实现，还有 Facade(下节课重点探讨)实现，以及助手函数实现；
+
+
+
+## Facade
+
+### 一．创建静态调用
+
+1. Facade，即门面设计模式，为容器的类提供了一种静态的调用方式；
+
+2. 在之前的很多课程中，我们大量的引入 Facade 类库，并且通过静态调用；
+
+3. 比如请求 Request::?，路由 Route::?，数据库 Db::?等等，均来自 Facade；
+
+4. 下面我们手工来创建一个自己的静态调用类库，来了解一下流程；
+
+5. 首先，在应用目录下创建 common 公共类库文件夹，并创建 Test.php；
+
+  ```php
+  namespace app\common;
+  class Test
+  {
+      public function hello($name)
+      {
+      	return 'Hello, '.$name;
+      }
+  }
+  ```
+
+6. 再在同一个目录下创建 facade 文件夹，并创建 Test.php，用于生成静态调用；
+
+  ```php
+  namespace app\Facade;
+  use think\Facade;
+  class Test extends Facade
+  {
+      protected static function getFacadeClass()
+      {
+      	return 'app\common\Test';
+      }
+  }
+  ```
+
+7. 然后在控制器端，就可以和之前系统提供的静态调用一样调用了；
+
+  ```php
+  return Test::hello('Mr.Lee!');
+  ```
+
+8. 除了在 `getFacadeClass()` 方法显示绑定，也可以在应用公共函数文件进行绑定；
+
+9. 这里的绑定后，就不需要 getFacadeClass()方法了，还可以进行批量统一绑定；
+
+  ```php
+  // 应用公共文件
+  use think\Facade;
+  Facade::bind('app\facade\Test', 'app\common\Test');
+  Facade::bind([
+  	'app\facade\Test' => 'app\common\Test',
+  ]);
+  ```
+
+### 二．核心类库
+
+1. 以下是系统提供的常用 Facade 核心类库表；
+
+![image-20210225115522682](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210225115522682.png)
+
+2. 在真正使用 Facade 核心类库时，直接使用提供的别名即可，具体别名如下：
+
+![image-20210225115543256](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210225115543256.png)

@@ -45,4 +45,12 @@ class Inject
 
         return app('one')->name;
     }
+
+    public function test()
+    {
+        $test = new \app\common\Test();
+//        return $test->hello('world!');
+
+        return \app\facade\Test::hello('Mr.Lee');
+    }
 }

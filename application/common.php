@@ -10,3 +10,10 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+use \think\Facade;
+
+//Facade::bind('app\facade\Test','app\common\Test');
+
+Facade::bind([
+    'app\facade\Test' => 'app\common\Test'
+]);
