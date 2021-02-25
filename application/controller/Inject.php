@@ -18,6 +18,8 @@ namespace app\controller;
 //    }
 //}
 
+use think\facade\Hook;
+
 class Inject
 {
     public function index()
@@ -52,5 +54,11 @@ class Inject
 //        return $test->hello('world!');
 
         return \app\facade\Test::hello('Mr.Lee');
+    }
+
+    public function bhv()
+    {
+        //钩子
+        Hook::listen('eat', '吃饭');
     }
 }

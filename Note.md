@@ -4480,3 +4480,78 @@ return app('request')->param('name');
 2. 在真正使用 Facade 核心类库时，直接使用提供的别名即可，具体别名如下：
 
 ![image-20210225115543256](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210225115543256.png)
+
+
+## 钩子和行为
+
+### 一．概念理解
+
+1. 首先，钩子和行为在 6.0 的版本被废弃了，用事件来取代；
+2. 虽说用事件来取代，不过意思的一样的，我们还是有必要理解一下；
+3. 什么是行为，就是在系统执行的流程中执行的一个动作；
+4. 比如，当执行到路由时，对路由的设置进行一系列的检测，这种就叫行为；
+5. 而钩子又是什么呢？可以理解为行为执行的那个位置点，触发点；
+6. 系统架构里用了很多这种方式实现框架程序，我们自己手工来创建一个试试；
+
+### 二．小实例
+
+1. 在应用目录下创建一个 behavior 文件夹，用于存放行为类，比如 Test.php
+
+  ```
+  namespace app\behavior;
+  class Test
+  {
+      public function run($params)
+      {
+      	echo $params.'，只要触发，我就执行！';
+      }
+  }
+  ```
+
+2. 行为类创建好之后，设置一个入口方法 run()，run()方法只要钩子被触发就执行；
+
+3. 比如，我们将行为注册到 tags.php 中应用初始化的数组里(app_init)；
+
+  ```php
+  // 应用初始化
+  'app_init' => [
+  	'app\behavior\Test',
+  ],
+  ```
+
+4. 我们也可以自定义一个钩子，然后注册到 tags.php 中，执行后触发；
+
+  ```php
+  public function bhv()
+  {
+      //钩子
+      Hook::listen('eat', '吃饭');
+  }
+  ```
+
+  ```php
+  //自定义
+  'eat' => [
+  	'app\behavior\Test',
+  ],
+  ```
+
+5. 那么，我们可不可以让初始化对应的是初始化的行为，自定义对应自定义的行为呢；
+
+6. app_init 对应的方法是 appInit(有下划线的大写)，而自定义 eat 就是 eat；
+
+  ```php
+  public function appInit($params)
+  {
+  	echo '初始化的行为被触发！';
+  }
+  
+  public function eat($params)
+  {
+  	echo $params.'的行为被触发！';
+  }
+  ```
+
+7. 系统除了 app_init 钩子，还提供了一系列的钩子供使用；
+
+![image-20210225115939153](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210225115939153.png)
