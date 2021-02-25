@@ -16,7 +16,8 @@ return [
     // 日志记录方式，内置 file socket 支持扩展
     'type'        => 'File',
     // 日志保存目录
-    'path'        => '',
+//    'path'        => '',
+    'path'        => Env::get('app_path') .'../runtime/logs/',
     // 日志记录级别
     'level'       => [],
     // 单文件日志写入
@@ -27,4 +28,6 @@ return [
     'max_files'   => 0,
     // 是否关闭日志写入
     'close'       => false,
+    // 转换为 json 格式
+    'json' => false
 ];
