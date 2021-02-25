@@ -5,5 +5,11 @@
 // +----------------------------------------------------------------------
 
 return [
-    app\http\middleware\Check::class
+    // 全局中间件注册及 传值
+//    app\http\middleware\Check::class,
+//    app\http\middleware\Auth::class
+
+//    [app\http\middleware\Auth::class,'hello'],
+//    'Auth',
+//    'Auth:hello'
 ];

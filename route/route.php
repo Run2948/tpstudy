@@ -181,7 +181,28 @@ Route::resource('blog.comment', 'Comment');
 
 //Route::get('read/:id', 'Blog/read');
 
-Route::get('edit/:id', 'Reply/edit');
+//Route::get('edit/:id', 'Reply/edit');
+
+//Route::get('read/:id', 'Inject/read');
+//Route::get('read/:id', 'Inject/read')->middleware('Auth');
+//Route::get('read/:id', 'Inject/read')->middleware('app\http\middleware\Auth');
+//Route::get('read/:id', 'Inject/read')->middleware(app\http\middleware\Auth::class);
+
+//Route::rule('read/:id', 'Inject/read')->middleware(['Auth', 'Check']);
+
+//Route::group('read', function () {
+//    Route::rule(':id', 'Inject/read');
+//})->middleware('Auth');
+
+//Route::rule('read/:id', 'Inject/read')->middleware(function ($request, Closure $next) {
+//    if ($request->param('id') == 10) {
+//        echo '是管理员！';
+//    }
+//    return $next($request);
+//});
+
+// 中间件传值
+//Route::rule('read/:id', 'Inject/read')->middleware('Auth:abc');
 
 return [
 

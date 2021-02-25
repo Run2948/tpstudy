@@ -18,11 +18,21 @@ namespace app\controller;
 //    }
 //}
 
+use think\Controller;
 use think\facade\Hook;
+use think\Request;
 
-class Inject
+class Inject extends Controller
 {
-    public function index()
+
+//    protected $middleware = ['Auth'];
+
+    protected $middleware = [
+        'Auth' => ['only' => ['index', 'test']],
+        'Check' => ['except' => ['bhv', 'read']],
+    ];
+
+    public function index(Request $request)
     {
 //        bind('one', 'app\model\One');
 
@@ -35,17 +45,21 @@ class Inject
 
 //        return app('app\model\One')->name;
 
-        bind([
-            'one' => 'app\model\One',
-            'user' => 'app\model\User'
-        ]);
+//        bind([
+//            'one' => 'app\model\One',
+//            'user' => 'app\model\User'
+//        ]);
 
-        bind([
-            'one' => \app\model\One::class,
-            'user' => \app\model\User::class
-        ]);
+//        bind([
+//            'one' => \app\model\One::class,
+//            'user' => \app\model\User::class
+//        ]);
 
-        return app('one')->name;
+//        return app('one')->name;
+
+        // 来自中间件的值
+//        return $request->middle_name;
+        return \think\facade\Request::param('middle_name');
     }
 
     public function test()
@@ -60,5 +74,10 @@ class Inject
     {
         //钩子
         Hook::listen('eat', '吃饭');
+    }
+
+    public function read($id)
+    {
+        return 'inject read: ' . $id;
     }
 }
