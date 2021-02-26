@@ -14,9 +14,22 @@ class User extends Validate
      */	
 	protected $rule = [
         'name|姓名' => 'require|max:20|checkName:胖虎', //不得为空，不得大于 20 位
-        'price' => 'number|between:1,100', //必须是数值，1-100 之间
-        'email' => 'email' //邮
+        'price|售价' => 'number|between:1,100', //必须是数值，1-100 之间
+        'email|邮箱' => 'email' //邮箱
     ];
+
+//    protected $rule = [
+//        'name' => [
+//            'require',
+//            'max' => 10,
+//            'checkName' => '李炎恢'
+//        ],
+//        'price' => [
+//            'number',
+//            'between' => '1,100'
+//        ],
+//        'email' => 'email'
+//    ];
 
     /**
      * 定义错误信息
@@ -37,7 +50,7 @@ class User extends Validate
 //    protected function checkName($value, $rule)
     protected function checkName($value, $rule, $data, $field, $title)
     {
-        echo $data;
+        dump($data);
         echo $field;
         echo $title;
         return $rule != $value ? true : '名称不得是“'.$rule.'”';
