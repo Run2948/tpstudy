@@ -5,6 +5,7 @@ namespace app\controller;
 
 use think\Controller;
 use think\facade\Validate;
+use think\Request;
 
 class Verify extends Controller
 {
@@ -120,5 +121,27 @@ class Verify extends Controller
         }
 
         echo $data['user'];
+    }
+
+    public function make()
+    {
+        dump(Validate::number(10));
+        dump(Validate::integer(-10));
+
+        dump(Validate::chsAlpha('蜡笔小新'));
+        dump(Validate::activeUrl('www.baidu.com'));
+
+        dump(Validate::dateFormat('2021-02-27','Y-m-d'));
+
+        dump(Validate::eq('100',100));
+        dump(Validate::same('100',100));
+
+        dump(Validate::regex(123456,'\d{6}'));
+
+        dump(Validate::file(\think\facade\Request::file('image')));
+        dump(Validate::image(\think\facade\Request::file('image'),'200,100,gif'));
+        dump(Validate::fileExt(\think\facade\Request::file('image'),'jpg'));
+
+        //...
     }
 }
