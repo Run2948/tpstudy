@@ -33,6 +33,22 @@
     <input type="submit" value="提交">
 </form>
 
+<hr/>
+
+<h2>Upload.php</h2>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" />
+    <input type="submit" value="上传">
+</form>
+<br/>
+<form action="/upload/uploads" method="post" enctype="multipart/form-data">
+    <input type="file" name="image[]" />
+    <input type="file" name="image[]" />
+    <input type="file" name="image[]" />
+    <input type="submit" value="上传">
+</form>
+
+
 <script src="../static/js/jquery.min.js"></script>
 <script type="text/javascript">
     $('.button').click(function () {
