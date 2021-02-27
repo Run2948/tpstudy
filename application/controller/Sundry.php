@@ -5,6 +5,7 @@ namespace app\controller;
 
 
 use think\facade\Cookie;
+use think\facade\Lang;
 use think\facade\Session;
 
 class Sundry
@@ -82,5 +83,19 @@ class Sundry
 //        cookie('user', null);
         //清除
 //        cookie(null, 'tp_');
+    }
+
+    public function error()
+    {
+//        Lang::load( '../application/lang/ja-jp.php');
+//        Lang::load( '../application/lang/en-us.php');
+
+        echo Lang::get('require_name');
+        echo '<br/>';
+        echo Lang::get('email_error');
+
+        echo lang('email_error');
+
+//        echo Lang::setAllowLangList(['zh-cn','en-us','ja-jp']);
     }
 }

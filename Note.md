@@ -5641,3 +5641,67 @@ return app('request')->param('name');
   //清除
   cookie(null, 'tp_');
   ```
+
+
+
+## 多语言
+
+### 一．配置多语言
+
+1. 如果要开启多语言切换功能，需要在 app.php 配置文件中开启；
+
+  ```php
+  // 是否开启多语言
+  'lang_switch_on' => true, 
+  ```
+
+2. 默认应用目录会调用 `application\lang` 目录下的语言包，我们创建三个；
+
+  ```php
+  //错误信息，zh-cn.php
+  return [
+  'require_name' => '用户名不得为空！',
+  'email_error' => '邮箱地址不正确！',
+  ];
+  //error message，en-us.php
+  return [
+  'require_name' => 'The user name cannot be empty!',
+  'email_error' => 'Incorrect email address!',
+  ];
+  //エラーメッセージ， ja-jp.php
+  return [
+  'require_name' => 'ユーザ名は空ではいけません！',
+  'email_error' => 'メールアドレスが間違っています！',
+  ];
+  ```
+
+3. 以上三个语言包，会根据条件自动加载，如果不在指定的目录则需要::load()；
+
+  ```php
+  Lang::load( '../application/common/lang/xx-xx.php');
+  ```
+
+4. 系统默认会指定：zh-cn 这个语言包，我们通过::get()来输出错误信息；
+
+  ```php
+  Lang::get('email_error');
+  ```
+
+5. 通过 URL 方式来切换语言，`?lang=en-us` 即可，也可以在公共文件设置 cookie；
+
+  ```php
+  \think\facade\Cookie::prefix('think_');
+  \think\facade\Cookie::set('var', 'en-us');
+  ```
+
+6. 在模版中调用语言信息，可以用 $Think.lang.xxx 或 {:lang('xxx')}；
+
+7. 助手函数：`lang('email_error');`
+
+8. 可以在公共文件，设置语言包限定列表，如下：
+
+  ```php
+  Lang::setAllowLangList(['zh-cn','en-us','ja-jp']);
+  ```
+
+9. 当开启限定列表后，默认语言又可以设置了。

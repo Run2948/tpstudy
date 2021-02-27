@@ -20,3 +20,6 @@ Facade::bind([
 
 //用错误级别关闭异常
 //error_reporting(0);
+
+// 设置语言包限定列表，
+//Lang::setAllowLangList(['zh-cn','en-us','ja-jp']);
