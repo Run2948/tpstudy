@@ -4,6 +4,7 @@
 namespace app\controller;
 
 use think\Controller;
+use think\facade\Validate;
 
 class Verify extends Controller
 {
@@ -85,5 +86,39 @@ class Verify extends Controller
     public function read($id)
     {
         return 'Read : '.$id;
+    }
+
+    public function facade()
+    {
+        //验证邮箱是否合法
+        dump(Validate::isEmail('bnbbs@163.com'));
+        //验证是否为空
+        dump(Validate::isRequre(''));
+        //验证是否为数值
+        dump(Validate::isNumber(10));
+
+        //验证数值合法性
+//        dump(Validate::checkRule(10, 'number|between:1,10'));
+//        dump(Validate::checkRule(10, ValidateRule::isNumber()->between('1,10')));
+
+    }
+
+    public function check()
+    {
+        $data = [
+            'user' => input('post.user'),
+            '__token__' => input('post.__token__')
+        ];
+
+        $validate = new \think\Validate();
+        $validate->rule([
+           'user' => 'require|token'
+        ]);
+
+        if(!$validate->batch()->check($data)){
+            dump($validate->getError());
+        }
+
+        echo $data['user'];
     }
 }

@@ -4,6 +4,8 @@ namespace app\controller;
 
 use think\Controller;
 use app\model\User as UserModel;
+use think\facade\Request;
+use think\facade\Session;
 
 class See extends Controller
 {
@@ -121,5 +123,14 @@ class See extends Controller
     {
         $this->assign('name','ThinkPHP');
         return $this->fetch();
+    }
+
+    public function vali()
+    {
+        echo Request::token();
+        echo '<br/>';
+        echo Session::get('__token__');
+        echo '<br/>';
+        return $this->fetch('vali');
     }
 }

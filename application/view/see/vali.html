@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单令牌</title>
+</head>
+<body>
+<form action="../verify/check" method="post">
+    <input type="text" name="user" value="">
+    <input type="hidden" name="__token__" value="{$Request.token}">
+    <input type="submit" value="提交表单">
+</form>
+</body>
+</html>
