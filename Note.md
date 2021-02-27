@@ -5544,3 +5544,100 @@ return app('request')->param('name');
   echo session('user');
   ```
 
+
+
+## Cookie
+
+### 一．Cookie
+
+1. Cookie 是客户端存储，无须手动初始化，配置文件 cookie.php 中会自行初始化；
+
+  ```php
+  return [
+  // cookie 名称前缀
+  'prefix' => '',
+  // cookie 保存时间
+  'expire' => 0,
+  // cookie 保存路径
+  'path' => '/',
+  // 是否使用 setcookie
+  'setcookie' => true,
+  ];
+  ```
+
+2. 当然，也可以自行手动初始化，也可以单独设置 cookie 前缀；
+
+  ```php
+  Cookie::init([
+  'prefix' => 'think_',
+  'expire' => 3600,
+  'path' => '/'
+  ]);
+  
+  Cookie::prefix('tp_');
+  ```
+
+3. ::set() 方法，创建一个最基本的 cookie，可以设置前缀、过期时间、数组等；
+
+  ```php
+  Cookie::set('user', 'Mr.Lee');
+  Cookie::set('user', 'Mr.Lee', 3600);
+  Cookie::set('user', 'Mr.Lee', [
+  'prefix' => 'think_',
+  'expire' => 3600
+  ]);
+  ```
+
+4. ::forever() 方法，永久保存 Cookie(就是十年的意思)；
+
+  ```php
+  Cookie::forever('user', 'Mr.Lee');
+  ```
+
+5. ::has() 方法，判断是否赋值，第二参数可设置前缀；
+
+  ```php
+  Cookie::has('user');
+  Cookie::has('user','think_');
+  ```
+
+6. ::get() 取值时，第二参数可设置前缀；
+
+  ```php
+  Cookie::get('user');
+  Cookie::get('user','think_');
+  ```
+
+7. ::delete() 删除，第二参数可以设置前缀；
+
+  ```php
+  Cookie::delete('user');
+  Cookie::delete('user', 'tp_');
+  ```
+
+8. ::clear() 方法，清空 Cookie，这里必须指定前缀，否则无法清空；
+
+  ```php
+  Cookie::clear('think_');
+  ```
+
+### 二．助手函数
+
+1. 助手函数，更加方便操作，如下：
+
+  ```php
+  //初始化
+  cookie([
+  'prefix' => 'tp_',
+  'expire' => 3600,
+  ]);
+  
+  //输出
+  echo cookie('user');
+  //设置
+  cookie('user', 'Mr.Lee', 3600);
+  //删除
+  cookie('user', null);
+  //清除
+  cookie(null, 'tp_');
+  ```

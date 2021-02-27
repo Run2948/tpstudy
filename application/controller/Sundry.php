@@ -4,6 +4,7 @@
 namespace app\controller;
 
 
+use think\facade\Cookie;
 use think\facade\Session;
 
 class Sundry
@@ -46,5 +47,40 @@ class Sundry
         echo Session::pull('user');
         Session::flush();
 
+    }
+
+    public function cookie()
+    {
+        Cookie::prefix('tp_');
+
+//        Cookie::set('user', 'Mr.Lee');
+        Cookie::set('users', ['zs','ls','ww'],3600);
+//        Cookie::set('user', 'Mr.Lee', 3600);
+//        Cookie::set('user', 'Mr.Lee', [
+//            'prefix' => 'tp_',
+//            'expire' => 3600
+//        ]);
+
+        // 永久（10年）
+        Cookie::forever('user', 'Mr.Lee');
+
+//        Cookie::has('user');
+
+//        Cookie::get('user');
+//        Cookie::get('users');
+
+//        Cookie::delete('user');
+
+//        Cookie::clear('tp_');
+
+        //输出
+//        echo cookie('user');
+        dump(cookie('users'));
+        //设置
+//        cookie('user', 'Mr.Lee', 3600);
+        //删除
+//        cookie('user', null);
+        //清除
+//        cookie(null, 'tp_');
     }
 }
