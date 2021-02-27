@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分页功能</title>
+    <style type="text/css">
+        .pagination {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .pagination li {
+            display: inline-block;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>邮箱</th>
+        <th>价格</th>
+    </tr>
+    {volist name='list' id='user'}
+    <tr>
+        <td>{$user.id}</td>
+        <td>{$user.username}</td>
+        <td>{$user.gender}</td>
+        <td>{$user.email}</td>
+        <td>{$user.price}</td>
+    </tr>
+    {/volist}
+</table>
+
+{$list|raw}
+
+<hr/>
+
+{//$list|raw}
+</body>
+</html>

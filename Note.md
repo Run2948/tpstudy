@@ -5705,3 +5705,110 @@ return app('request')->param('name');
   ```
 
 9. 当开启限定列表后，默认语言又可以设置了。
+
+
+
+## 分页功能
+
+### 一．分页功能
+
+1. 不管是数据库操作还是模型操作，都使用 paginate()方法来实现；
+
+  ```php
+  //查找 user 表所有数据，每页显示 5 条
+  $list = Db::name('user')->paginate(5);
+  return json($list);
+  ```
+
+2. 通过生成的数据列表，可以得到分页必须的参数变量，具体如下；
+
+  ```php
+  total(总条数)
+  per_page(每页条数)
+  current_page(当前页码)
+  last_page(最终页码)
+  ```
+
+3. 创建一个静态模版页面，并使用{volist}标签遍历列表；
+
+  ```php
+<table border="1">
+<tr>
+<th>编号</th>
+<th>姓名</th>
+<th>性别</th>
+<th>邮箱</th>
+<th>价格</th>
+</tr>
+{volist name='list' id='user'}
+<tr>
+<td>{$user.id}</td>
+<td>{$user.username}</td>
+<td>{$user.gender}</td>
+<td>{$user.email}</td>
+<td>{$user.price}</td>
+</tr>
+{/volist}
+</table>
+  ```
+4. 分页功能还提供了一个固定方式，实现分页按钮，只需要设置相应的 CSS 即可；
+
+  ```php
+{$list|raw}
+
+<ul class="pagination">
+<li><a href="?page=1">&laquo;</a></li>
+<li><a href="?page=1">1</a></li>
+<li class="active"><span>2</span></li>
+<li class="disabled"><span>&raquo;</span></li>
+</ul>
+    
+<style type="text/css">
+.pagination {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+.pagination li {
+display: inline-block;
+padding: 20px;
+}
+</style>
+  ```
+5. 也可以单独赋值分页的模版变量；
+
+  ```php
+  // 获取分页显示
+  $page = $list->render();
+  $this->assign('page', $page);
+  ```
+```php
+ {$page|raw}
+```
+
+6. 也可以单独获取到总记录数量；
+
+  ```php
+  $total = $list->total();
+  ```
+
+7. 可以限定总记录数，比如，限定总记录数只有 10 条；
+
+  ```php
+  ->paginate(5, 10);
+  ```
+
+8. 如果你使用模型方式分页，则可以通过获取器修改字段值，而分页本身也可以；
+
+  ```php
+  ->each(function ($item, $key) {
+  	$item['gender'] = '【'.$item['gender'].'】';
+  	return $item;
+  });
+  ```
+
+9. 也可以设置分页的页码为简洁分页，就是没有 1，2，3，4 这种，只有上下页；
+
+  ```php
+  ->paginate(5, true);
+  ```
