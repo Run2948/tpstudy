@@ -44,10 +44,10 @@ class Verify extends Controller
 //        ]);
 
         // 批量验证
-        $validate = new \app\validate\User();
-        if (!$validate->batch()->check($data)) {
-            dump($validate->getError());
-        }
+//        $validate = new \app\validate\User();
+//        if (!$validate->batch()->check($data)) {
+//            dump($validate->getError());
+//        }
 
         // 独立验支持对象化的定义方式
 //        $validate = new \think\Validate();
@@ -59,14 +59,31 @@ class Verify extends Controller
 //        ]);
 
         // 独立验支持闭包的自定义方式
-        $validate = new \think\Validate();
-        $validate->rule([
-            'name' => function ($value, $data) {
-                return $value != '' ? true : '姓名不得为空';
-            },
-            'price'=> function ($value) {
-                return $value > 0 ? true : '价格不得小于零';
-            }
-        ]);
+//        $validate = new \think\Validate();
+//        $validate->rule([
+//            'name' => function ($value, $data) {
+//                return $value != '' ? true : '姓名不得为空';
+//            },
+//            'price'=> function ($value) {
+//                return $value > 0 ? true : '价格不得小于零';
+//            }
+//        ]);
+
+
+        // 根据场景验证
+//        $validate = new \app\validate\User();
+//        if (!$validate->scene('edit')->batch()->check($data)) {
+//            dump($validate->getError());
+//        }
+
+        $result = $this->validate($data, '\app\validate\User.edit');
+        if ($result !== true) {
+            dump($result);
+        }
+    }
+
+    public function read($id)
+    {
+        return 'Read : '.$id;
     }
 }

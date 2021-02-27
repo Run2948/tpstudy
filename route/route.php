@@ -204,6 +204,17 @@ Route::resource('blog.comment', 'Comment');
 // 中间件传值
 //Route::rule('read/:id', 'Inject/read')->middleware('Auth:abc');
 
+//Route::get('read/:id', 'Verify/read')->validate(\app\validate\User::class);
+
+Route::rule('read/:id','Verify/read')
+    ->validate([
+        'id' => 'number|between:1,10',
+        'email' => \think\validate\ValidateRule::isEmail()
+    ], 'edit', [
+        'id.between' => 'id 限定在 1-10 之间',
+        'email' => '邮箱格式错误'
+    ], true);
+
 return [
 
 ];
