@@ -6163,4 +6163,72 @@ padding: 20px;
   });
   ```
 
-  
+
+
+## 关联模型初探
+
+### 一．关联模型定义
+
+1. 关联模型，顾名思义，就是将表与表之间进行关联和对象化，更高效的操作数据；
+
+2. 我们已经有了一张 tp_user 表，主键为：id；我们需要一个附属表，来进行关联；
+
+3. 附属表：tp_profile，建立两个字段：user_id 和 hobby，外键是 user_id；
+    ![image-20210228130538829](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210228130538829.png)
+
+4. User 模型端，需要关联 Profile，具体方式如下：
+
+  ```php
+  class User extends Model
+  {
+      public function profile()
+      {
+      	//hasOne 表示一对一关联，参数一表示附表，参数二外键，默认 user_id
+      	return $this->hasOne('Profile','user_id');
+      }
+  }
+  ```
+
+5. 创建一个控制器用于测试输出：Grade.php；
+
+  ```php
+  $user = UserModel::get(21);
+  return json($user->profile);
+  return $user->profile->hobby;
+  ```
+
+6. 对于关联方式，系统提供了 8 种方案，具体如下:
+    ![image-20210228130631441](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210228130631441.png)
+
+7. 一般来说，模型都在同一个命名空间下，直接指定模型的类名即可；
+
+8. 除非你设置的关联模型，不在同一个命名空间下，就需要指定完整的路径；
+
+  ```php
+  //如果不在同一个命名空间下，请用命名空间路径指定关联
+  return $this->hasOne('app\model\Profile','user_id');
+  ```
+
+9. 上面的例子，我们采用了一对一的关联模型，它还有相对的反向关联；
+
+  ```php
+  class Profile extends Model
+  {
+      public function user()
+      {
+      	return $this->belongsTo('User');
+      }
+  }
+  ```
+
+  ```php
+  public function belong()
+  {
+      $profile = ProfileModel::get(1);
+//      return json($profile->user);
+      return $profile->user->email;
+  }
+  ```
+
+10. 正反向关联也就是关联关系和相对的关联关系，具体如下表：
+![image-20210228130652189](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210228130652189.png)

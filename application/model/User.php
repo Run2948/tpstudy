@@ -5,6 +5,8 @@ namespace app\model;
 use think\Model;
 use think\model\concern\SoftDelete;
 
+/*
+
 class User extends Model
 {
     // 指定主键为 uid 属性
@@ -120,5 +122,22 @@ class User extends Model
     public function scopePriceGreater($query, $value)
     {
         $query->where('price', '>', 80);
+    }
+}
+
+*/
+
+
+class User extends Model
+{
+    public function profile()
+    {
+        //hasOne 表示一对一关联，参数一表示附表，参数二外键，默认 user_id
+//        return $this->hasOne('Profile');
+//        return $this->hasOne('Profile','user_id');
+
+        //如果不在同一个命名空间下，请用命名空间路径指定关联
+        return $this->hasOne('app\model\Profile');
+//        return $this->hasOne('app\model\Profile','user_id');
     }
 }
