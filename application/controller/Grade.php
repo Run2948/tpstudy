@@ -88,4 +88,32 @@ class Grade
             dump($user->profile);
         }
     }
+
+    public function count()
+    {
+//        $list = UserModel::withCount('profile')->all([19, 20, 21]);
+//        foreach ($list as $user) {
+//            echo $user->profile_count . '<br/>';
+//        }
+
+//        $list = UserModel::withSum('profile', 'status')->all([19,20,21]);
+//        foreach ($list as $user) {
+//            echo $user->profile_sum.'<br>';
+//        }
+
+//        $list = UserModel::withSum(['profile'=>'p_s'], 'status')->all([19,20,21]);
+//        foreach ($list as $user) {
+//            echo $user->p_s.'<br>';
+//        }
+
+
+        $list = UserModel::with('profile')->select();
+        // 隐藏主表字段或附属表的字段；
+//        return json($list->hidden(['profile.status']));
+//        return json($list->hidden(['username','password','profile'=>['status','id']]));
+        // 只显示相关的字段
+//        return json($list->visible(['profile.status']));
+        // 添加一个额外字段
+        return json($list->append(['book.title']));
+    }
 }

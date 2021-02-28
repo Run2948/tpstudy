@@ -6433,3 +6433,65 @@ padding: 20px;
     dump($user->profile);
   }
   ```
+
+
+
+## 关联统计和输出
+
+### 一．关联统计
+
+1. 使用 withCount()方法，可以统计主表关联附表的个数，输出用 profile_count；
+
+  ```php
+  $list = UserModel::withCount('profile')->all([19,20,21]);
+  foreach ($list as $user) {
+    echo $user->profile_count;
+  }
+  ```
+
+2. 关联统计的输出采用“关联方法名”_ count，这种结构输出；
+
+3. 不单单支持 Count，还有如下统计方法，均可支持；
+
+4. withMax()、withMin()、withSum()、withAvg()等；
+
+5. 除了 withCount()不需要指定字段，其它均需要指定统计字段；
+
+  ```php
+  $list = UserModel::withSum('profile', 'status')->all([19,20,21]);
+  foreach ($list as $user) {
+    echo $user->profile_sum.'<br>';
+  }
+  ```
+
+6. 对于输出的属性，可以自定义：
+
+  ```php
+  $list = UserModel::withSum(['profile'=>'p_s'], 'status')->all([19,20,21]);
+  foreach ($list as $user) {
+    echo $user->p_s.'<br>';
+  }
+  ```
+
+### 二．关联输出
+
+1. 使用 hidden()方法，隐藏主表字段或附属表的字段；
+
+  ```php
+  $list = UserModel::with('profile')->select();
+  return json($list->hidden(['profile.status']));
+  // 或：
+  return json($list->hidden(['username','password','profile'=>['status','id']]));
+  ```
+
+2. 使用 visible()方法，只显示相关的字段；
+
+  ```php
+  $list->visible(['profile.status'])
+  ```
+
+3. 使用 append()方法，添加一个额外字段，比如另一个关联的对象属性；
+
+  ```php
+  $list->append(['book.title'])
+  ```
