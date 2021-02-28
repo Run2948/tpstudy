@@ -137,7 +137,11 @@ class User extends Model
 //        return $this->hasOne('Profile','user_id');
 
         //如果不在同一个命名空间下，请用命名空间路径指定关联
-        return $this->hasOne('app\model\Profile');
+//        return $this->hasOne('app\model\Profile');
+        // hasOne('关联模型',['外键','主键']);
 //        return $this->hasOne('app\model\Profile','user_id');
+
+        // hasMany('关联模型',['外键','主键']);
+        return $this->hasMany('Profile','user_id', 'id');
     }
 }

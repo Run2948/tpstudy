@@ -9,15 +9,32 @@ class Grade
 {
     public function index()
     {
-        $user = UserModel::get(19);
+//        $user = UserModel::get(19);
 //        return json($user->profile);
 
         // 关联修改
-        $user->profile->save(['hobby'=>'酷爱小姐姐']);
+//        $user->profile->save(['hobby'=>'酷爱小姐姐']);
         // 关联新增
-        $user->profile()->save(['hobby'=>'不喜欢吃青椒']);
+//        $user->profile()->save(['hobby'=>'不喜欢吃青椒']);
 
-        return $user->profile->hobby;
+//        return $user->profile->hobby;
+//        return json($user->profile()->where('id', '>', 10)->select());
+
+//        $users = UserModel::has('profile', '>=', 2)->select();
+//        $users = UserModel::hasWhere('profile', ['status' => 1])->select();
+//        return json($users);
+
+        // 关联新增，批量新增
+//        $user = UserModel::get(19);
+//        $user->profile()->save(['hobby' => '测试喜好', 'status' => 1]);
+//        $user->profile()->saveAll([
+//            ['hobby' => '测试喜好', 'status' => 1],
+//            ['hobby' => '测试喜好', 'status' => 1]
+//        ]);
+
+        // 关联删除
+        $user = UserModel::get(227, 'profile');
+        $user->together('profile')->delete();
     }
 
     public function belong()
