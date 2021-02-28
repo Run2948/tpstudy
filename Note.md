@@ -6038,19 +6038,19 @@ padding: 20px;
 
 1. 图像处理功能不是系统内置的功能了，需要通过 composer 引入进来；
 
-  ```
+  ```bash
   composer require topthink/think-image
   ```
 
 2. 引入进来之后，首先创建图像处理对象；
 
-  ```
+  ```php
   $image = Image::open('image.png');
   ```
 
 3. 获得了图像处理对象后，可以得到这张图片的各种属性；
 
-  ```
+  ```php
   //图片宽度
   echo $image->width();
   //图片高度
@@ -6115,3 +6115,52 @@ padding: 20px;
     ```php
     $image->text('Mr.Lee',getcwd().'/1.ttf',20,'#ffffff')->save('text1.png');
     ```
+
+
+
+## 数据库和模型的事件
+
+### 一．数据库事件
+
+1. 当你执行增删改查的时候，可以触发一些事件来执行额外的操作；
+
+2. 这些额外的操作事件，可以部署在构造方法里等待激活执行；
+
+3. 数据库事件方法为 Db::event('事件名', '执行函数')，具体事件名如下：
+
+4. 数据库事件只支持：find、select、update、delete、insert 这几个方法；
+![image-20210228124614130](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210228124614130.png)
+
+5. 在控制器端，事件一般可以写在构造方法里，方便统一管理；
+
+  ```php
+  public function initialize()
+  {
+      Db::event('before_select', function ($query) {
+        echo '执行了批量查询操作！';
+      });
+      Db::event('after_update', function ($query) {
+        echo '执行了修改操作！';
+      });
+  }
+  ```
+
+### 二．模型事件
+
+1. 和数据库事件类似，模型事件也是将事件存放在 init 静态方法里等待触发；
+
+2. 支持的事件类型更加的丰富，具体如下：
+![image-20210228124559553](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210228124559553.png)
+
+3. 在模型端创建 init()方法，写入模型事件，可以使用 event 或快捷方式；
+
+  ```php
+  self::event('before_update', function ($query) {
+    echo '准备开始更新数据...';
+  });
+  self::event('after_update', function ($query) {
+    echo '数据已经更新完毕...';
+  });
+  ```
+
+  

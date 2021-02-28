@@ -9,6 +9,19 @@ use think\db\exception\DataNotFoundException;
 
 class DataTest extends Controller
 {
+    protected function initialize()
+    {
+//        parent::initialize();
+
+        Db::event('before_select', function ($query) {
+            echo '执行了批量查询操作！';
+        });
+
+        Db::event('after_update', function ($query) {
+            echo '执行了修改操作！';
+        });
+    }
+
     public function index()
     {
 //        $data = Db::table('tp_user') -> find();

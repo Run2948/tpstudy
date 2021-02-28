@@ -57,6 +57,13 @@ class User extends Model
     {
 //        parent::init();
 //        echo '初始化！';
+
+        self::event('before_update', function ($query) {
+            echo '准备开始更新数据...';
+        });
+        self::event('after_update', function ($query) {
+            echo '数据已经更新完毕...';
+        });
     }
 
     public function getUserName()
