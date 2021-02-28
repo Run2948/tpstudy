@@ -53,4 +53,39 @@ class Grade
         })->select();
         return json($user);
     }
+
+    public function union()
+    {
+        // 在普通的关联查询下，我们循环数据列表会执行 n+1 次 SQL 查询
+//        $list = UserModel::all([19, 20, 21]);
+//        foreach ($list as $user) {
+//            dump($user->profile);
+//        }
+
+        // 果采用关联预载入的方式，将会减少到两次
+//        $list = UserModel::with('profile')->all([19, 20, 21]);
+//        foreach ($list as $user) {
+//            dump($user->profile);
+//        }
+
+//        $list = UserModel::with('profile,book')->all([19, 20, 21]);
+//        foreach ($list as $user) {
+//            dump($user->profile.$user->book);
+//        }
+
+//        $list = UserModel::all([19, 20, 21], 'profile,book');
+
+//        $list = UserModel::withJoin('profile')->all([19, 20, 21]);
+//        $list = UserModel::withJoin(['profile' => function ($query) {
+//            $query->withField('hobby');
+//        }])->all([19, 20, 21]);
+//        $list = UserModel::withJoin(['profile' => ['hobby']])->all([19, 20, 21]);
+
+        // 延迟加载
+        $list = UserModel::all([19, 20, 21]);
+        $list->load('profile');
+        foreach ($list as $user) {
+            dump($user->profile);
+        }
+    }
 }
