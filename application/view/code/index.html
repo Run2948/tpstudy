@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证码功能</title>
+</head>
+<body>
+<!--<div><img src="{:captcha_src()}" alt="captcha" /></div>-->
+
+<div>{:captcha_img()}</div>
+
+<form action="/code/verify" method="post">
+    <input type="text" name="code" />
+    <input type="submit" value="提交">
+</form>
+
+<br/><hr/><br/>
+
+<!--<div><img src="../code/show"></div>-->
+
+<!--<form action="/code/check" method="post">-->
+<!--    <input type="text" name="code" />-->
+<!--    <input type="submit" value="提交">-->
+<!--</form>-->
+
+</body>
+</html>

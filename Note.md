@@ -5902,3 +5902,130 @@ padding: 20px;
     //删除指定缓存
     cache('user', null);
     ```
+
+
+
+## 验证码功能
+
+### 一．验证码功能
+
+1. 验证码功能不是系统内置的功能了，需要通过 composer 引入进来；
+
+  ```php
+  composer require topthink/think-captcha=2.0.* 
+  ```
+
+2. 引入进来之后，我们在模版中，验证一下验证码是否能正常显示；
+
+  ```html
+  <div>{:captcha_img()}</div>
+  <div><img src="{:captcha_src()}" alt="captcha" /></div>
+  ```
+
+3. 创建一个模版页面，设置一个验证码和文本框提交比对；
+
+  ```html
+<form action="../code" method="post">
+  <input type="text" name="code"/>
+  <input type="submit" value="验证"/>
+</form>
+  ```
+
+4. 创建 Code 控制器，用于接受表单的值，然后采用 validate 验证验证码；
+
+  ```php
+  class Code extends Controller
+  {
+      public function index()
+      {
+          $data = [
+            'code' => Request::post('code')
+          ];
+          $flag = $this->validate($data, [
+            'code|验证码' => 'require|captcha'
+          ]);
+          dump($flag);
+      }
+  }
+  ```
+
+5. 第二种方法，可以通过对象的方式来实现，使用 Captcha 类；
+
+  ```php
+    public function show()
+    {
+        $captcha = new Captcha();
+        return $captcha->entry();
+    }
+    public function check()
+    {
+        $captcha = new Captcha();
+        dump($captcha->check(Request::post('code')));
+    }
+  ```
+  ```html
+	<div><img src="../code/show"></div>
+  ```
+
+6. 如果一个页面生成了多个验证码，那需要通过 id 设置标识来确认；
+
+  ```php
+  return $captcha->entry(1);
+  $captcha->check(Request::post('code'), 1)
+  ```
+
+7. 还有一个独立的验证码检测函数来验证是否匹配；
+
+  ```php
+  captcha_check(Request::post('code'), 1)
+  ```
+
+8. 验证码的所有配置参数如下，根据需要进行调用：
+
+![image-20210228101625438](https://gitee.com/zhujinrun/image/raw/master/2020/image-20210228101625438.png)
+
+9. 可以通过创建对象的方式，来传入配置参数；
+
+  ```php
+  $config = [
+  //字体大小
+  'fontSize' => 30,
+  //验证码位数
+  'length' => 3,
+  //验证码杂点
+  'useNoise' => true,
+  ];
+  ```
+
+10. 对象方式，也可以采用动态方式设置，具体如下：
+
+    ```php
+    $captcha = new Captcha();
+    $captcha->length = 3;
+    $captcha->useNoise = true;
+    $captcha->fontSize = 30;
+    ```
+
+11. 如果没有采用创建对象的方式，那么可以采用在 config 创建 captcha.php；
+
+    ```php
+    return [
+      //字体大小
+      'fontSize' => 30,
+      //验证码位数
+      'length' => 3,
+      //验证码杂点
+      'useNoise' => false,
+    ];
+    ```
+
+12. 在下载的验证码语言包里：`vendor/topthink/...`下，有.ttf 字体；
+
+    ```php
+    //字体选择
+    'fontttf' => '1.ttf' 13. 也可以设置指定的背景图片，开启中文验证，指定验证码等等；
+    //背景图片
+    'useImgBg' => true
+    //中文验证
+    'useZh' => true
+    ```
