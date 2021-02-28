@@ -149,4 +149,12 @@ class User extends Model
     {
         return $this->hasOne('app\model\Book','user_id','id');
     }
+
+    public function roles()
+    {
+//        return $this->belongsToMany('Role', 'Access');
+
+        // belongsToMany('关联模型','中间表',['外键','关联键']);
+        return $this->belongsToMany('Role', 'Access', 'role_id', 'user_id');
+    }
 }

@@ -116,4 +116,34 @@ class Grade
         // 添加一个额外字段
         return json($list->append(['book.title']));
     }
+
+    public function many()
+    {
+        //得到一个用户：蜡笔小新
+        $user = UserModel::get(21);
+        //获取这个用户的所有角色
+//        $roles = $user->roles;
+        //输出这个角色所具有的权限
+//        return json($roles);
+
+        // 关联新增角色
+//        $user->roles()->save(['type'=>'测试管理员']);
+//        $user->roles()->saveAll(['type'=>'测试管理员1','测试管理员2']);
+
+        //
+        $user->roles()->save(1);
+        // 或：
+        $user->roles()->save(Role::get(1));
+        $user->roles()->saveAll([1, 2, 3]);
+        // 或：
+        $user->roles()->attach(1);
+        $user->roles()->attach(2, ['details' => '测试详情']);
+
+        // 删除
+        $user->roles()->detach(2);
+
+        $roles = $user->roles;
+        //输出这个角色所具有的权限
+        return json($roles);
+    }
 }
